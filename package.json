@@ -2,8 +2,23 @@
   "name": "apex-multiviewer-starter",
   "version": "0.2.0",
   "private": true,
+<<<<<<< HEAD
   "scripts": { "dev": "node scripts/run-site.mjs dev", "build": "next build", "start": "node scripts/run-site.mjs start", "lint": "eslint ." },
   "dependencies": {
+=======
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "node scripts/run-site.mjs dev",
+    "build": "next build",
+    "start": "node scripts/run-site.mjs start",
+    "api": "node node_modules/f1-livetiming-api/src/server.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "f1-livetiming-api": "https://github.com/julesr0y/f1-livetiming-api/archive/refs/heads/main.tar.gz",
+>>>>>>> 3fb160a (Primeiro commit: projeto Live-Time)
     "lucide-react": "^0.468.0",
     "next": "^16.0.0",
     "react": "^19.2.0",
