@@ -3,22 +3,11 @@ import type { DriverTiming, LiveTimingSnapshot, RaceControlMessage, RaceControlS
 type Row = Record<string, unknown>;
 export type F1LiveApiHealth = { service: string; connected: boolean; status: string; lastMessageAt: string | null; uptimeSeconds: number | null; timestamp: string | null; apiBaseUrl: string };
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-const configuredApiBaseUrl = process.env.F1_LIVETIMING_API_URL?.trim();
-export const apiBaseUrl = (configuredApiBaseUrl || (process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:3001")).replace(/\/+$/, "");
-=======
->>>>>>> temp-branch
 // A API roda no mesmo container/processo-pai do site (scripts/run-site.mjs) e é
 // consumida por loopback. F1_LIVETIMING_API_URL só precisa ser definida quando
 // a API estiver hospedada em outro lugar.
 const configuredApiBaseUrl = process.env.F1_LIVETIMING_API_URL?.trim();
 export const apiBaseUrl = (configuredApiBaseUrl || "http://127.0.0.1:3001").replace(/\/+$/, "");
-<<<<<<< HEAD
-=======
->>>>>>> 3fb160a (Primeiro commit: projeto Live-Time)
->>>>>>> temp-branch
 
 function row(value: unknown): Row { return value && typeof value === "object" && !Array.isArray(value) ? value as Row : {}; }
 function pick(...values: unknown[]): unknown { return values.find((value) => value !== undefined && value !== null && value !== ""); }
@@ -177,13 +166,6 @@ function mapSession(value: unknown, lapCountValue: unknown, weatherValue: unknow
 }
 
 export async function fetchF1LiveJson(path: string): Promise<unknown> {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  if (!apiBaseUrl) throw new Error("F1_LIVETIMING_API_URL não foi configurada para este deploy.");
-=======
->>>>>>> 3fb160a (Primeiro commit: projeto Live-Time)
->>>>>>> temp-branch
   const response = await fetch(`${apiBaseUrl}/api/${path.replace(/^\/+/, "")}`, { cache: "no-store", signal: AbortSignal.timeout(3500), headers: { Accept: "application/json" } });
   if (!response.ok) throw new Error(`f1-livetiming-api respondeu HTTP ${response.status} em /api/${path}.`);
   return response.json() as Promise<unknown>;
@@ -204,11 +186,3 @@ export async function fetchF1LiveSnapshot(health?: F1LiveApiHealth): Promise<Liv
   const raceControl = mapRaceControl(raceValue);
   return { session: mapSession({ Session: leaderboard.Session }, { LapCount: leaderboard.LapCount }, weatherValue, raceControl, status.connected), drivers, raceControl, emittedAt: status.lastMessageAt ?? new Date().toISOString() };
 }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-export { apiBaseUrl };
-=======
->>>>>>> 3fb160a (Primeiro commit: projeto Live-Time)
->>>>>>> temp-branch
