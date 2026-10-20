@@ -1,13 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { Activity, ArrowDownToLine, ChevronDown, CirclePlay, Expand, Grid2X2, LayoutGrid, Link2, Maximize2, MonitorPlay, Plus, Radio, RotateCcw, Settings2, Volume2, X } from "lucide-react";
 
 type Feed = { id: string; name: string; url: string };
 const layouts = [1, 2, 4] as const;
 
+/**
+ * Fontes de vídeo salvas no navegador (localStorage), lidas com
+ * useSyncExternalStore: no servidor a lista começa vazia e, no navegador, já
+ * nasce com o valor salvo, sem setState dentro de efeito. Outras abas recebem a
+ * mudança pelo evento "storage".
+ */
+const FEEDS_KEY = "apex-multiview-feeds";
+const FEEDS_EVENT = "apex-multiview-feeds-change";
+let memoryFeeds: string | null = null; // usado se o localStorage estiver bloqueado
+
+function subscribeFeeds(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  window.addEventListener(FEEDS_EVENT, onChange);
+  return () => { window.removeEventListener("storage", onChange); window.removeEventListener(FEEDS_EVENT, onChange); };
+}
+function readFeeds(): string | null {
+  try { return localStorage.getItem(FEEDS_KEY) ?? memoryFeeds; } catch { return memoryFeeds; }
+}
+function parseFeeds(raw: string | null): Feed[] {
+  if (!raw) return [];
+  try { const value: unknown = JSON.parse(raw); return Array.isArray(value) ? value as Feed[] : []; } catch { return []; }
+}
+function saveFeeds(feeds: Feed[]) {
+  memoryFeeds = JSON.stringify(feeds);
+  try { localStorage.setItem(FEEDS_KEY, memoryFeeds); } catch { /* fica só na memória desta aba */ }
+  window.dispatchEvent(new Event(FEEDS_EVENT));
+}
+
 export function MultiviewConsole() {
-  const [feeds, setFeeds] = useState<Feed[]>([]);
+  const savedFeeds = useSyncExternalStore(subscribeFeeds, readFeeds, () => null);
+  const feeds = useMemo(() => parseFeeds(savedFeeds), [savedFeeds]);
   const [assignments, setAssignments] = useState<Record<number, string>>({});
   const [layout, setLayout] = useState<(typeof layouts)[number]>(4);
   const [activeTile, setActiveTile] = useState(0);
@@ -15,27 +44,18 @@ export function MultiviewConsole() {
   const [url, setUrl] = useState("");
   const [formOpen, setFormOpen] = useState(false);
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("apex-multiview-feeds");
-      if (saved) setFeeds(JSON.parse(saved) as Feed[]);
-    } catch { setFeeds([]); }
-  }, []);
-
   function addFeed(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const feed: Feed = { id: crypto.randomUUID(), name: name.trim() || `Feed ${feeds.length + 1}`, url: url.trim() };
     const updated = [...feeds, feed];
-    setFeeds(updated);
-    localStorage.setItem("apex-multiview-feeds", JSON.stringify(updated));
+    saveFeeds(updated);
     setAssignments((current) => ({ ...current, [activeTile]: feed.id }));
     setName(""); setUrl(""); setFormOpen(false);
   }
 
   function removeFeed(id: string) {
     const updated = feeds.filter((feed) => feed.id !== id);
-    setFeeds(updated);
-    localStorage.setItem("apex-multiview-feeds", JSON.stringify(updated));
+    saveFeeds(updated);
     setAssignments((current) => Object.fromEntries(Object.entries(current).filter(([, feedId]) => feedId !== id)));
   }
 

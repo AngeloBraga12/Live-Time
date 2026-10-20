@@ -13,7 +13,7 @@ export default function CalendarPage() {
   const { now, calendar, seasons } = useCalendar();
   const initialSeason = seasons.includes(now.getUTCFullYear()) ? now.getUTCFullYear() : 2026;
   const [season, setSeason] = useState<number>(initialSeason);
-  const events = calendar[season] ?? [];
+  const events = useMemo(() => calendar[season] ?? [], [calendar, season]);
   const today = dateKey(now);
   const nextEvent = useMemo(() => events.find((event) => event.endDate >= today), [events, today]);
   const upcomingEvent = nextEvent;

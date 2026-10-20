@@ -11,7 +11,6 @@ export function useCalendar() {
   const [seasons, setSeasons] = useState<number[]>([...F1_SEASONS]);
 
   useEffect(() => {
-    const updateClock = () => setNow(new Date());
     const loadCalendar = async () => {
       try {
         const response = await fetch("/api/calendar", { cache: "no-store" });
