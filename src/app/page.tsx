@@ -1,5 +1,8 @@
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+import { LiveTiming } from "@/components/live/live-timing";
 
-export default function Home() {
-  redirect("/multiview");
+export const metadata: Metadata = { title: { absolute: "Apex Timing · F1 ao vivo" } };
+
+export default function HomePage() {
+  return <LiveTiming />;
 }
