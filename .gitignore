@@ -1,5 +1,5 @@
 node_modules/
-.runtime/
+
 .next/
 out/
 build/

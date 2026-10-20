@@ -2,7 +2,7 @@ services:
   - type: web
     name: live-time
     runtime: docker
-    # Planos gratuitos hibernam por inatividade e derrubariam a conexão com o feed da F1.
-    plan: starter
+    # O plano gratuito hiberna sem acessos; ao acordar o site reconecta ao feed da F1 sozinho (~1 s).
+    plan: free
     healthCheckPath: /api/health
     autoDeploy: true

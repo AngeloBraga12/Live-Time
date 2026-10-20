@@ -46,9 +46,10 @@ export default function LiveTimingPage() {
   const normalizedMeeting = liveMeeting.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const eventAliases = currentEvent ? [currentEvent.name, currentEvent.location, currentEvent.country].map((value) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()) : [];
   const feedMatchesCurrentEvent = Boolean(currentEvent && eventAliases.some((alias) => alias.length > 3 && normalizedMeeting.includes(alias)));
-  const feedFinishedCurrentEvent = connection === "live" && feedMatchesCurrentEvent && (session.status === "finished" || session.status === "chequered");
-  const displayCalendarEvent = feedFinishedCurrentEvent ? nextAfterToday ?? currentEvent : currentEvent;
-  const showFeedSession = connection === "live" && feedMatchesCurrentEvent && liveMeeting && session.status !== "finished" && session.status !== "chequered";
+  // Durante o fim de semana o feed mantém a última sessão (inclusive já encerrada) até a próxima começar.
+  const showFeedSession = connection === "live" && feedMatchesCurrentEvent && Boolean(liveMeeting);
+  const raceFinished = showFeedSession && session.sessionName.toLowerCase() === "race" && (session.status === "finished" || session.status === "chequered");
+  const displayCalendarEvent = raceFinished ? nextAfterToday ?? currentEvent : currentEvent;
   const displayedDrivers = showFeedSession ? drivers : [];
   const displayedRaceControl = showFeedSession ? raceControl : [];
   const displayedDriver = showFeedSession ? selectedDriver : undefined;
@@ -59,8 +60,8 @@ export default function LiveTimingPage() {
   const eventDescription = showFeedSession
     ? `Aguardando dados publicados da sessão ${session.sessionName} em ${eventName}.`
     : displayCalendarEvent
-      ? `Aguardando a conexão da f1-livetiming-api. A próxima etapa é ${eventName}, no fim de semana de ${formatWeekend(displayCalendarEvent)}.`
-      : "Aguardando conexão da f1-livetiming-api e a próxima etapa publicada no calendário.";
+      ? `Aguardando o início da próxima sessão ao vivo. A próxima etapa é ${eventName}, no fim de semana de ${formatWeekend(displayCalendarEvent)}.`
+      : "Aguardando a próxima sessão ao vivo e a próxima etapa publicada no calendário.";
 
   return <SectionWorkspace active="/timing" title="Live Timing" description="Acompanhe posições, ritmo, pneus e mensagens da sessão ao vivo."><div className="live-timing-page f1-timing-shell">
     <header className="event-header"><div className="event-title-block"><div className="event-title-row"><span className="country-mark">F1</span><div><div className="event-overline">{showFeedSession ? "F1 LIVE" : `ROUND ${String(displayCalendarEvent?.round ?? "—").padStart(2,"0")} · CALENDÁRIO ${displayCalendarEvent?.season ?? ""}`} <span>·</span> {showFeedSession ? session.sessionName : "PRÓXIMO GP"}</div><h1>{eventName}</h1></div></div><div className="event-subtitle">{eventCircuit}<span>·</span>{eventLocation}{eventCountry && eventCountry !== eventLocation ? <><span>·</span>{eventCountry}</> : null}<span>·</span>{displayCalendarEvent ? formatWeekend(displayCalendarEvent) : ""}</div></div><div className="event-header-right"><div className="session-chip"><span className="session-chip-dot"/><span>{showFeedSession ? session.sessionName : displayCalendarEvent?.name ?? "F1 CALENDAR"}</span><ChevronDown size={13}/></div><StatusPill flag={showFeedSession ? session.trackFlag : "unknown"}/></div></header>

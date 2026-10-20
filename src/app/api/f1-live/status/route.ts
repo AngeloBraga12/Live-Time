@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
-import { fetchF1LiveHealth, apiBaseUrl } from "@/lib/f1-livetiming-api";
+import { getFeedHealth, unavailable } from "@/lib/f1/source";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 15;
 
 export async function GET() {
   try {
-    return NextResponse.json(await fetchF1LiveHealth(), { headers: { "Cache-Control": "no-store" } });
+    const health = await getFeedHealth();
+    return NextResponse.json(health, { headers: { "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=5", "CDN-Cache-Control": "public, s-maxage=2, stale-while-revalidate=5" } });
   } catch (error) {
-    return NextResponse.json({ service: "f1-livetiming-api", connected: false, status: "UNAVAILABLE", lastMessageAt: null, uptimeSeconds: null, timestamp: null, apiBaseUrl, error: error instanceof Error ? error.message : "API indisponível." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json(unavailable(error), { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }

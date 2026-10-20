@@ -1,24 +1,27 @@
 import { NextResponse } from "next/server";
-import { fetchF1LiveHealth, fetchF1LiveSnapshot } from "@/lib/f1-livetiming-api";
+import { getLiveSnapshot, unavailable } from "@/lib/f1/source";
+import type { LiveTimingPollResponse } from "@/types/live-timing";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 10;
+export const maxDuration = 15;
+
+/**
+ * Snapshot normalizado da sessão. Usado como alternativa ao streaming
+ * (/api/live-timing/stream) quando ele não estiver disponível.
+ *
+ * O cache de 1 s na CDN faz com que vários visitantes ao mesmo tempo gerem
+ * no máximo uma execução da função por segundo.
+ */
+const CACHE = "public, max-age=0, s-maxage=1, stale-while-revalidate=4";
 
 export async function GET() {
   try {
-    const health = await fetchF1LiveHealth();
-    if (!health.connected) {
-      return NextResponse.json({ connected: false, lastMessageAt: health.lastMessageAt }, { headers: { "Cache-Control": "no-store" } });
-    }
-
-    const snapshot = await fetchF1LiveSnapshot(health);
-    return NextResponse.json({ connected: true, lastMessageAt: health.lastMessageAt, snapshot }, { headers: { "Cache-Control": "no-store" } });
+    const { health, snapshot } = await getLiveSnapshot();
+    const body: LiveTimingPollResponse = { connected: health.connected && Boolean(snapshot), lastMessageAt: health.lastMessageAt, ...(snapshot ? { snapshot } : {}) };
+    return NextResponse.json(body, { headers: { "Cache-Control": CACHE, "CDN-Cache-Control": "public, s-maxage=1, stale-while-revalidate=4" } });
   } catch (error) {
-    return NextResponse.json({
-      connected: false,
-      lastMessageAt: null,
-      error: error instanceof Error ? error.message : "Não foi possível consultar o provedor de timing.",
-    }, { status: 502, headers: { "Cache-Control": "no-store" } });
+    const body: LiveTimingPollResponse = { connected: false, lastMessageAt: null, error: unavailable(error).error };
+    return NextResponse.json(body, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
 }

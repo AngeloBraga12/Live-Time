@@ -1,0 +1,10 @@
+# Deploy na Netlify. O adaptador oficial do Next.js (OpenNext) é aplicado automaticamente.
+# Limite da Netlify: funções com streaming duram até 60 s, então o stream de live timing
+# é renovado a cada 25 s (o navegador reabre sozinho). Na Vercel a janela é de 290 s.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
