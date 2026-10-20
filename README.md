@@ -2,6 +2,8 @@
 
 Painel Next.js (App Router, TypeScript, Tailwind, Zustand) para acompanhar o live timing da F1 em tempo real: classificação, setores, pneus, clima, Race Control, multiview e calendário.
 
+Site no ar: **[live-time-silk.vercel.app](https://live-time-silk.vercel.app)** (deploy automático a cada push na `main`).
+
 Os dados vêm **direto do feed oficial de live timing da F1** (SignalR Core em `livetiming.formula1.com`), gratuito e sem chave. Não existe serviço separado para hospedar: o próprio servidor do Next.js abre a conexão quando alguém acessa o site. Funciona na **Vercel**, na **Netlify**, em Docker ou localmente.
 
 ## Como funciona
