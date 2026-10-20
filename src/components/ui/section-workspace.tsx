@@ -28,7 +28,7 @@ export function SectionWorkspace({ active, title, description, children }: { act
       </header>
       <section className="section-screen-heading"><div><span className="widget-kicker">APEX TIMING / {title.toUpperCase()}</span><h1>{title}</h1><p>{description ?? "Dados apresentados conforme a disponibilidade da sessão selecionada."}</p></div></section>
       {children}
-      <footer className="app-footer"><span>APEX TIMING <b>v0.3</b></span><span>F1 LIVETIMING API · REST / SSE</span><span>ATUALIZAÇÃO · 1s</span></footer>
+      <footer className="app-footer"><span>APEX TIMING <b>v0.3</b></span><span>F1 LIVE TIMING · SIGNALR / SSE</span><span>ATUALIZAÇÃO · 1s</span></footer>
     </div>
   </main>;
 }

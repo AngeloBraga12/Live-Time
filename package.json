@@ -1,34 +1,23 @@
 {
-  "name": "apex-multiviewer-starter",
+  "name": "live-time",
   "version": "0.2.0",
   "private": true,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "scripts": { "dev": "node scripts/run-site.mjs dev", "build": "next build", "start": "node scripts/run-site.mjs start", "lint": "eslint ." },
-  "dependencies": {
-=======
->>>>>>> temp-branch
   "engines": {
     "node": ">=20.9.0"
   },
   "scripts": {
-    "dev": "node scripts/run-site.mjs dev",
+    "dev": "next dev",
     "build": "next build",
-    "start": "node scripts/run-site.mjs start",
-    "api": "node node_modules/f1-livetiming-api/src/server.js",
-    "lint": "eslint ."
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
-    "f1-livetiming-api": "https://github.com/julesr0y/f1-livetiming-api/archive/refs/heads/main.tar.gz",
-<<<<<<< HEAD
-=======
->>>>>>> 3fb160a (Primeiro commit: projeto Live-Time)
->>>>>>> temp-branch
     "lucide-react": "^0.468.0",
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "ws": "^8.22.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
@@ -36,9 +25,11 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/ws": "^8.18.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
     "tailwindcss": "^4.1.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.8.0"
   }
 }

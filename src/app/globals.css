@@ -1103,3 +1103,15 @@ html[data-theme="dark"] .calendar-round:hover { background:#202627; }
   .calendar-round-status { grid-column:2/-1; text-align:left; }
   .calendar-source { align-items:flex-start; flex-direction:column; }
 }
+.settings-error { margin:8px 0; color:#e6a07a; font:9px var(--mono); letter-spacing:.04em; overflow-wrap:anywhere; }
+.settings-security-note b { overflow-wrap:anywhere; text-align:right; }
+
+/* Tema claro: as células do timing herdavam cores claras feitas para o tema escuro. */
+html:not([data-theme="dark"]) .f1-timing-shell .timing-table .position-cell b { color:#172326; }
+html:not([data-theme="dark"]) .f1-timing-shell .timing-table .gap-cell,
+html:not([data-theme="dark"]) .f1-timing-shell .timing-table .laps-cell { color:#45514f!important; }
+html:not([data-theme="dark"]) .f1-timing-shell .timing-table .lap-cell { color:#172326!important; }
+html:not([data-theme="dark"]) .f1-timing-shell .updated-at.is-live { color:#16747b; }
+/* Tema escuro: setores normais herdavam a cor escura do tema claro. */
+html[data-theme="dark"] .f1-timing-shell .sector-time.sector-normal,
+html[data-theme="dark"] .f1-timing-shell .sector-time.sector-unknown { color:#d9dfdb; }

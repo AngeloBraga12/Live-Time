@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export type F1LiveStatus = { service: string; connected: boolean; status: string; lastMessageAt: string | null; uptimeSeconds: number | null; timestamp: string | null; apiBaseUrl: string; error?: string };
+export type F1LiveStatus = { service: string; mode?: "direct" | "external"; connected: boolean; status: string; lastMessageAt: string | null; uptimeSeconds: number | null; timestamp: string | null; apiBaseUrl: string; error?: string };
 
-const offline: F1LiveStatus = { service: "f1-livetiming-api", connected: false, status: "CHECKING", lastMessageAt: null, uptimeSeconds: null, timestamp: null, apiBaseUrl: "" };
+const offline: F1LiveStatus = { service: "F1 SignalR (conexão direta)", connected: false, status: "CHECKING", lastMessageAt: null, uptimeSeconds: null, timestamp: null, apiBaseUrl: "" };
 
 export function useF1LiveApiStatus() {
   const [health, setHealth] = useState<F1LiveStatus>(offline);
@@ -17,11 +17,11 @@ export function useF1LiveApiStatus() {
         const data = await response.json() as F1LiveStatus;
         if (active) setHealth(data);
       } catch {
-        if (active) setHealth((current) => ({ ...current, connected: false, status: "UNAVAILABLE", error: "Não foi possível acessar a API de timing configurada." }));
+        if (active) setHealth((current) => ({ ...current, connected: false, status: "UNAVAILABLE", error: "Não foi possível consultar o servidor do painel." }));
       }
     };
     void readStatus();
-    const interval = window.setInterval(() => void readStatus(), 5000);
+    const interval = window.setInterval(() => void readStatus(), 10_000);
     return () => { active = false; controller.abort(); window.clearInterval(interval); };
   }, []);
   return health;

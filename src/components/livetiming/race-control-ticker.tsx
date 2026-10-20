@@ -7,6 +7,6 @@ export function RaceControlTicker({ messages }: { messages: RaceControlMessage[]
     <div className="race-messages">{messages.length === 0 ? <div className="empty-race-control">Aguardando mensagens disponíveis para a sessão selecionada.</div> : messages.slice(0, 4).map((message) => <article className="race-message" key={message.id}>
       <FlagMarker severity={message.severity}/><div className="message-body"><div className="message-meta"><time>{message.timestamp}</time>{message.lap != null && <span>LAP {message.lap}</span>}</div><p>{message.message}</p></div>
     </article>)}</div>
-    <div className="mock-source-note">F1 LIVETIMING API · FEED DE TERCEIROS</div>
+    <div className="mock-source-note">FEED OFICIAL F1 LIVE TIMING</div>
   </section>;
 }
