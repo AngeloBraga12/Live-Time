@@ -1115,3 +1115,36 @@ html:not([data-theme="dark"]) .f1-timing-shell .updated-at.is-live { color:#1674
 /* Tema escuro: setores normais herdavam a cor escura do tema claro. */
 html[data-theme="dark"] .f1-timing-shell .sector-time.sector-normal,
 html[data-theme="dark"] .f1-timing-shell .sector-time.sector-unknown { color:#d9dfdb; }
+
+/* Multiview no tema claro: contraste mínimo WCAG AA (4,5:1).
+   A área de vídeo continua escura; textos sobre ela ficam claros, e o rodapé e a
+   barra lateral (fundo claro) usam tons escuros. */
+html:not([data-theme="dark"]) .mv-session strong { color:#f4f5ee!important; }
+html:not([data-theme="dark"]) .mv-feed-number { color:#a9b6ae!important; }
+html:not([data-theme="dark"]) .mv-empty-feed strong { color:#f4f5ee!important; }
+html:not([data-theme="dark"]) .mv-empty-feed p { color:#c9d2cd!important; opacity:1!important; }
+html:not([data-theme="dark"]) .mv-canvas-footer,
+html:not([data-theme="dark"]) .mv-canvas-footer span,
+html:not([data-theme="dark"]) .mv-canvas-footer .mv-sync { color:#3f4c4e!important; }
+html:not([data-theme="dark"]) .mv-block-label,
+html:not([data-theme="dark"]) .mv-block-label span,
+html:not([data-theme="dark"]) .mv-selected-window small,
+html:not([data-theme="dark"]) .mv-sidebar-note { color:#4f5c5e!important; }
+html:not([data-theme="dark"]) .app-footer,
+html:not([data-theme="dark"]) .app-footer b,
+html:not([data-theme="dark"]) .app-footer span { color:#4f5c5e; }
+html:not([data-theme="dark"]) .mv-layout-picker button small { color:#31494d!important; }
+html:not([data-theme="dark"]) .mv-layout-picker button.selected small { color:#a3201c!important; }
+
+/* Multiview no tema escuro: mesmos ajustes de contraste. */
+html[data-theme="dark"] .mv-session strong { color:var(--text)!important; }
+html[data-theme="dark"] .mv-feed-number { color:#a9b6ae!important; }
+html[data-theme="dark"] .mv-empty-feed p { color:var(--muted)!important; opacity:1!important; }
+html[data-theme="dark"] .mv-canvas-footer span,
+html[data-theme="dark"] .mv-canvas-footer .mv-sync { color:#c2cbc5!important; }
+html[data-theme="dark"] .mv-layout-picker button small { color:#dbe3dd!important; }
+html[data-theme="dark"] .mv-empty-feed button,
+html[data-theme="dark"] .mv-add-source,
+html[data-theme="dark"] .mv-source-form button:last-child { background:#c42521!important; border-color:#c42521!important; color:#fff!important; }
+html[data-theme="dark"] .mv-block-label span { color:var(--muted)!important; }
+html[data-theme="dark"] .mv-window-mark { background:#c42521!important; color:#fff!important; }
