@@ -38,7 +38,7 @@ Envelope devolvido por `/api/live-timing` e pelo evento `snapshot` do stream.
 | Campo | Tipo | Origem no feed |
 | --- | --- | --- |
 | `eventName` | string | `SessionInfo.Meeting.OfficialName` (ou `meetingName`) |
-| `meetingName` | string | `SessionInfo.Meeting.Name` (ou `OfficialName`). Comparado com o calendário pela página `/timing`. |
+| `meetingName` | string | `SessionInfo.Meeting.Name` (ou `OfficialName`). Comparado com o calendário pela página inicial. |
 | `circuitName` | string | `SessionInfo.Meeting.Circuit.ShortName` |
 | `locality` | string | `SessionInfo.Meeting.Location` |
 | `country` | string | `SessionInfo.Meeting.Country.Name` |

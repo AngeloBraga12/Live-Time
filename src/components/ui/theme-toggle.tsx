@@ -31,8 +31,7 @@ export function ThemeToggle() {
   const nextLabel = theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro";
   return (
     <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={nextLabel} title={nextLabel}>
-      {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
-      <span>{theme === "dark" ? "CLARO" : "ESCURO"}</span>
+      {theme === "dark" ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
     </button>
   );
 }

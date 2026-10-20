@@ -4,6 +4,25 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ## [Não lançado]
 
+### Redesign no estilo do site da F1
+
+- Nova identidade visual: preto carbono, vermelho F1 (`#e10600`) só em destaques, fundo off-white, fonte Archivo com títulos largos em caixa alta e cartões com o canto superior direito arredondado.
+- `/` passa a ser a página ao vivo: topo com sessão, voltas, clima e faixa do estado da pista (ou próxima etapa com contagem regressiva), classificação com alternância Líder/Intervalo e lista da direção de prova.
+- Dados da última sessão aparecem como "Último resultado" entre fins de semana, em vez de ficarem escondidos.
+- Calendário em cartões, com a próxima etapa em vermelho e países em português.
+- Tabela responsiva (colunas somem em 1100, 800 e 560 px), esqueleto de carregamento, link "Pular para o conteúdo" e contraste AA nos dois temas.
+- Só a página ao vivo abre conexão com o live timing; o calendário não consome cota.
+
+### Removido no redesign
+
+- Páginas Multiview, Telemetria, Race Control (separada) e Conexão. `/timing`, `/multiview`, `/telemetry`, `/race-control` e `/settings` redirecionam para `/`.
+- Indicador "F1 API · CONECTADA/OFFLINE", hook `useF1LiveApiStatus`, componentes sem uso (`MiniSectorTrack`, `MultiviewStrip`, `StatusPill`, `FlagMarker`, `Countdown`, `SectionWorkspace`), ação `addRaceControl` da store e coluna de velocidade.
+- Tailwind CSS e PostCSS: os estilos são CSS puro em `globals.css`.
+
+### Qualidade
+
+- Lint zerado (0 erros, 0 avisos), incluindo as correções do PR #4.
+
 ### Documentação
 
 - README reescrito com visão geral, arquitetura, rotas, deploy, limitações e solução de problemas.

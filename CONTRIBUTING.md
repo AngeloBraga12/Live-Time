@@ -12,11 +12,11 @@ Obrigado por ajudar a melhorar o Live-Time. Este guia resume o fluxo de trabalho
 
 ```bash
 git checkout main && git pull
-git checkout -b tipo/descricao-curta      # ex.: fix/contraste-multiview
+git checkout -b tipo/descricao-curta      # ex.: fix/contraste-calendario
 # ... alterações ...
 npm test && npm run build
-git add -A && git commit -m "Corrige contraste do Multiview no tema claro"
-git push -u origin fix/contraste-multiview
+git add -A && git commit -m "Corrige contraste do calendário no tema claro"
+git push -u origin fix/contraste-calendario
 gh pr create --fill                       # ou pelo site do GitHub
 ```
 
@@ -39,7 +39,7 @@ Frase curta no imperativo, em português, descrevendo o efeito: `Adiciona aba de
 
 - [ ] `npm test` passa
 - [ ] `npm run build` passa
-- [ ] Sem novos erros em `npm run lint` (os 3 erros antigos estão listados em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md#lint))
+- [ ] `npm run lint` sem erros nem avisos
 - [ ] Testado na URL de preview da Vercel
 - [ ] Documentação atualizada (`README.md` e `docs/`) se mudou comportamento, rota, variável ou tipo
 - [ ] Entrada no [CHANGELOG.md](CHANGELOG.md)
@@ -57,9 +57,7 @@ Frase curta no imperativo, em português, descrevendo o efeito: `Adiciona aba de
 
 ## Ideias de contribuição
 
-- Corrigir os erros antigos de lint (`set-state-in-effect`).
-- Melhorar o contraste do Multiview no tema claro.
 - Usar `ExtrapolatedClock` para mostrar o tempo restante de treinos e qualificações.
 - Exibir `TeamRadio` ou `PitLaneTimeCollection`.
-- Mapas de pista para outros circuitos (hoje `MiniSectorTrack` tem só o Circuit of The Americas e não está em uso).
+- Mapa da pista com a posição dos carros (depende de `Position.z`, que hoje exige login de F1 TV).
 - Horários das sessões no calendário (hoje a contagem é só por data).

@@ -30,18 +30,20 @@ curl -N --max-time 5 $BASE/api/live-timing/stream
 
 ## Problemas no site
 
-### "Aguardando o início da próxima sessão ao vivo"
+### A tabela mostra "Último resultado" em vez da sessão ao vivo
 
-Esperado entre fins de semana. A página `/timing` só mostra o feed quando o nome da etapa do feed bate com a etapa atual do calendário. Se acontecer **durante** uma sessão:
+Esperado entre fins de semana: a F1 mantém a última sessão no feed, e a página inicial só trata como ao vivo quando o nome da etapa do feed bate com a etapa atual do calendário. Se acontecer **durante** uma sessão:
 
 1. Confira `session.meetingName` em `/api/live-timing`.
 2. Confira se o nome, a cidade ou o país dessa etapa em `src/data/f1-calendar.ts` aparecem nesse texto (sem acentos, minúsculas). Se a F1 usar outro nome, ajuste o calendário.
 3. Confira as datas da etapa no calendário (comparação em UTC).
 
-### Indicador "F1 API · OFFLINE"
+### "Sem dados da F1 no momento"
 
-- Veja `/api/f1-live/status` (acima).
-- Se só o seu navegador mostra offline, verifique extensões que bloqueiam requisições (bloqueadores de anúncios às vezes barram `eventsource`).
+A conexão com a F1 não entregou pilotos.
+
+- Veja `/api/f1-live/status` (acima); o campo `error` explica a falha.
+- Se só o seu navegador falha, verifique extensões que bloqueiam requisições (bloqueadores de anúncios às vezes barram `eventsource`).
 
 ### Dados demoram ou "pulam"
 
@@ -58,20 +60,15 @@ Proposital: após 2 minutos oculta, a aba pausa a conexão para poupar a cota gr
 
 ### Telemetria vazia (acelerador, freio, marcha)
 
-Esses dados vêm do canal `CarData.z`, que exige login de assinante F1 TV. O projeto mostra apenas a velocidade do speed trap, quando disponível.
+Esses dados vêm do canal `CarData.z`, que exige login de assinante F1 TV. A API devolve a velocidade do speed trap quando disponível, mas a tela não exibe telemetria.
 
 ### Replay de sessões antigas
 
 Não disponível: o arquivo estático da F1 (`livetiming.formula1.com/static`) responde HTTP 401.
 
-### Multiview não exibe o vídeo
+### Endereços antigos
 
-- O site de origem pode proibir incorporação (`X-Frame-Options` ou `Content-Security-Policy: frame-ancestors`). Use a URL de incorporação ("embed") do serviço.
-- Conteúdo `http://` não carrega dentro de um site `https://`.
-
-### Textos com pouco contraste no tema claro
-
-Alguns textos do Multiview ainda têm contraste baixo no tema claro. Use o tema escuro pelo botão no topo enquanto isso não é corrigido.
+`/timing`, `/multiview`, `/telemetry`, `/race-control` e `/settings` foram removidos no redesign e redirecionam para `/`.
 
 ## Problemas de deploy
 

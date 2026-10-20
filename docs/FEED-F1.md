@@ -171,7 +171,7 @@ O arquivo estático de sessões anteriores (`https://livetiming.formula1.com/sta
 
 O hub continua aceitando conexões entre os fins de semana e devolve o **estado da última sessão** (por exemplo, a corrida de Singapura até o começo das atividades em Austin). Nenhum delta chega até a próxima sessão, por isso `lastMessageAt` pode ficar dias no passado.
 
-A página `/timing` usa isso a seu favor: ela só mostra os dados quando `session.meetingName` corresponde à etapa atual do calendário local, e depois que a corrida termina passa a exibir a próxima etapa (veja [FRONTEND.md](FRONTEND.md#timing)).
+A página inicial usa isso a seu favor: só trata os dados como ao vivo quando `session.meetingName` corresponde à etapa atual do calendário local; fora disso, mostra a próxima etapa no topo e os dados como "Último resultado" (veja [FRONTEND.md](FRONTEND.md#página-ao-vivo)).
 
 ## Testando sem a F1
 

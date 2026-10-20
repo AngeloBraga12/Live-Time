@@ -176,7 +176,7 @@ Com `Cache-Control: no-store`.
 
 ## GET /api/f1-live/status
 
-Estado da conexão com a origem dos dados, usado pelo indicador "F1 LIVE" no topo de todas as páginas (consultado a cada 10 s). Arquivo: [`src/app/api/f1-live/status/route.ts`](../src/app/api/f1-live/status/route.ts).
+Estado da conexão com a origem dos dados, útil para diagnóstico e monitoramento (o site não consulta esta rota). Arquivo: [`src/app/api/f1-live/status/route.ts`](../src/app/api/f1-live/status/route.ts).
 
 ### Resposta 200
 
@@ -223,7 +223,7 @@ Cabeçalho: `Cache-Control: no-store`.
 
 ## GET /api/calendar
 
-Calendário local (não depende da F1). Arquivo: [`src/app/api/calendar/route.ts`](../src/app/api/calendar/route.ts), dados em [`src/data/f1-calendar.ts`](../src/data/f1-calendar.ts).
+Calendário local (não depende da F1). O site usa o calendário embutido no código e não consulta esta rota; ela existe para integrações. Arquivo: [`src/app/api/calendar/route.ts`](../src/app/api/calendar/route.ts), dados em [`src/data/f1-calendar.ts`](../src/data/f1-calendar.ts).
 
 ```json
 {
@@ -290,5 +290,5 @@ Cabeçalho: `Cache-Control: public, max-age=300, stale-while-revalidate=3600`.
 
 - Prefira o stream; ele envia só quando algo muda.
 - Se usar polling, 1–2 s é suficiente: a CDN já agrega as chamadas em janelas de 1 s.
-- Não confie em `lastMessageAt` para saber se há sessão ao vivo; use `session.status` e compare `session.meetingName` com o calendário (como faz a página `/timing`).
+- Não confie em `lastMessageAt` para saber se há sessão ao vivo; use `session.status` e compare `session.meetingName` com o calendário (como faz a página inicial).
 - Os dados são da F1 e servidos apenas para visualização pessoal; veja o aviso em [README](../README.md#aviso-legal).

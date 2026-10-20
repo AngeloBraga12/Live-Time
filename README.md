@@ -1,6 +1,6 @@
 # Apex Timing (Live-Time)
 
-Painel web para acompanhar o **live timing da Fórmula 1 em tempo real**, de graça e sem chave de API: classificação, diferenças, setores, pneus, clima, mensagens do Race Control, calendário da temporada e um mosaico de vídeos (Multiview).
+Painel web para acompanhar o **live timing da Fórmula 1 em tempo real**, de graça e sem chave de API: classificação, diferenças, setores, pneus, clima, estado da pista, mensagens da direção de prova e o calendário da temporada, com visual inspirado no site oficial da F1.
 
 **Site no ar:** [live-time-silk.vercel.app](https://live-time-silk.vercel.app) — publicado automaticamente pela Vercel a cada merge na `main`.
 
@@ -37,7 +37,7 @@ Abra o site  →  o navegador conecta sozinho  →  o servidor fala com a F1  �
 | --- | --- |
 | **Gratuito** | Usa o feed público de cronometragem da F1 e roda no plano gratuito da Vercel ou da Netlify. |
 | **Zero configuração** | Nenhuma variável de ambiente obrigatória. Clonou, publicou, funciona. |
-| **Conexão automática** | Qualquer página aberta já conecta ao live timing; não há botão de "conectar". |
+| **Conexão automática** | Abrir o site já conecta ao live timing; não há botão de "conectar". |
 | **Tempo real** | Server-Sent Events com no máximo um envio por segundo e só quando algo muda. |
 | **Sem servidor extra** | O próprio Next.js abre o WebSocket com a F1 dentro da função serverless. |
 | **Resiliente** | Reconecta sozinho após quedas, troca para polling se o streaming falhar e volta ao streaming depois. |
@@ -51,7 +51,7 @@ Abra o site  →  o navegador conecta sozinho  →  o servidor fala com a F1  �
 ```mermaid
 flowchart LR
     subgraph Navegador
-        P[Qualquer página] --> H[useLiveTiming]
+        P[Página ao vivo /] --> H[useLiveTiming]
         H --> Z[(Store Zustand)]
     end
     subgraph Servidor Next.js
@@ -70,7 +70,7 @@ flowchart LR
     F --> N --> S
 ```
 
-1. **Abrir o site.** Todas as páginas usam o layout `SectionWorkspace`, que chama o hook `useLiveTiming()`. Ele abre um `EventSource` para `/api/live-timing/stream`.
+1. **Abrir o site.** A página inicial (`/`) renderiza `LiveTiming`, que chama o hook `useLiveTiming()`. Ele abre um `EventSource` para `/api/live-timing/stream`.
 2. **Conectar à F1.** A rota chama `f1Feed.ensure()`. Se não houver conexão fresca, o servidor faz o negotiate do SignalR, abre o WebSocket em `wss://livetiming.formula1.com/signalrcore` e assina 12 canais (`TimingData`, `DriverList`, `RaceControlMessages`, etc.).
 3. **Estado completo.** A F1 responde à assinatura com o estado inteiro da sessão. Por isso, até uma função serverless que acabou de "acordar" já entrega a classificação completa no primeiro evento.
 4. **Deltas.** A partir daí a F1 manda só o que mudou. O servidor aplica cada delta em memória (`merge.ts`), converte para um formato estável (`normalize.ts`) e envia ao navegador, agrupando rajadas em no máximo um evento por segundo.
@@ -78,7 +78,7 @@ flowchart LR
 6. **Plano B.** Se o stream falhar 3 vezes seguidas, o painel consulta `/api/live-timing` a cada 2 s e tenta o stream de novo após 60 s.
 7. **Economia.** Com a aba oculta por 2 minutos, a conexão é pausada; ao voltar, reabre na hora. Sem ninguém assistindo por 90 s, o servidor fecha o WebSocket com a F1.
 
-Entre fins de semana, a F1 mantém o estado da última sessão. A página `/timing` só exibe esses dados se a etapa do feed for a etapa atual do calendário; depois da corrida, passa a mostrar a próxima etapa.
+Entre fins de semana, a F1 mantém o estado da última sessão. A página inicial compara a etapa do feed com o calendário: se for a etapa atual, mostra a sessão ao vivo; se não, mostra a próxima etapa no topo e os dados como **Último resultado**. Depois da corrida, o topo passa para a etapa seguinte.
 
 Detalhes: [docs/ARQUITETURA.md](docs/ARQUITETURA.md) e [docs/FEED-F1.md](docs/FEED-F1.md).
 
@@ -88,15 +88,12 @@ Detalhes: [docs/ARQUITETURA.md](docs/ARQUITETURA.md) e [docs/FEED-F1.md](docs/FE
 
 | Rota | Menu | O que mostra |
 | --- | --- | --- |
-| `/` | — | Redireciona para `/multiview`. |
-| `/multiview` | Multiview | Mosaico de vídeos com 1, 2 ou 4 janelas. Você adiciona URLs de players (iframe); elas ficam salvas no navegador. |
-| `/timing` | Live Timing | Cabeçalho da etapa, volta atual/total, status da sessão, temperaturas e quatro abas: **Classificação** (POS, piloto, GAP, intervalo, última, melhor, S1–S3, pneu, voltas), **Setores**, **Pneus** e **Race Control**. |
-| `/calendar` | Calendário | Temporadas 2026 (23 etapas) e 2027 (24 etapas), próxima etapa, etapas encerradas e contagem regressiva em dias. |
-| `/telemetry` | Telemetria | Pilotos na sessão, melhor volta e cobertura dos dados recebidos. |
-| `/race-control` | Race Control | Todas as mensagens da direção de prova, com contagem de críticas e alertas. |
-| `/settings` | Conexão | Estado do feed, endpoint, horário do último dado e explicação da conexão automática. |
+| `/` | Ao vivo | Topo escuro com a sessão (selo **Ao vivo**, etapa, circuito, volta atual/total, temperaturas do ar e da pista e faixa colorida do estado da pista) ou, fora das sessões, a próxima etapa com contagem regressiva. Abaixo, a classificação (posição, piloto, diferença para o líder ou intervalo, última e melhor volta, S1–S3, pneu e voltas) e a lista da direção de prova. |
+| `/calendar` | Calendário | Temporadas 2026 (23 etapas) e 2027 (24 etapas) em cartões, com a próxima etapa em vermelho e as passadas marcadas como encerradas. |
 
-Na barra superior de todas as páginas: indicador **F1 API · CONECTADA / VERIFICANDO / OFFLINE** (atualizado a cada 10 s) e botão de tema claro/escuro.
+As rotas antigas (`/timing`, `/multiview`, `/telemetry`, `/race-control`, `/settings`) redirecionam para `/`.
+
+No cabeçalho: marca, navegação e botão de tema claro/escuro (a escolha fica salva no navegador).
 
 Detalhes de cada página, componentes, hooks e store: [docs/FRONTEND.md](docs/FRONTEND.md).
 
@@ -107,7 +104,7 @@ Detalhes de cada página, componentes, hooks e store: [docs/FRONTEND.md](docs/FR
 | Camada | Tecnologia |
 | --- | --- |
 | Framework | [Next.js](https://nextjs.org) 16 (App Router) |
-| UI | React 19, Tailwind CSS 4 + CSS próprio, ícones [lucide-react](https://lucide.dev) |
+| UI | React 19, CSS próprio (`globals.css`, sem framework), fonte Archivo via `next/font`, ícones [lucide-react](https://lucide.dev) |
 | Estado | [Zustand](https://zustand.docs.pmnd.rs) 5 |
 | Linguagem | TypeScript 5 (estrito) |
 | Conexão com a F1 | [ws](https://github.com/websockets/ws) 8 (WebSocket no servidor), protocolo SignalR Core JSON |
@@ -211,15 +208,17 @@ src/
 │   ├── api/f1-live/status/    estado da conexão
 │   ├── api/health/            health check
 │   ├── api/calendar/          calendário
-│   ├── multiview/ timing/ calendar/ telemetry/ race-control/ settings/
-│   ├── layout.tsx             HTML raiz e tema
-│   └── globals.css            estilos e temas
+│   ├── page.tsx               "/" (ao vivo)
+│   ├── calendar/page.tsx      "/calendar"
+│   ├── layout.tsx             HTML raiz, fonte, tema, cabeçalho e rodapé
+│   └── globals.css            estilos, tokens e temas
 ├── components/
-│   ├── livetiming/            tabela de classificação, Race Control, mapa
-│   ├── multiview/             mosaico de vídeos
-│   └── ui/                    layout, status, tema, contagem regressiva
+│   ├── live/                  página ao vivo: topo, classificação, direção de prova
+│   ├── calendar/              cartões do calendário
+│   └── ui/                    cabeçalho, rodapé, botão de tema
 ├── data/f1-calendar.ts        calendário 2026 e 2027
-├── hooks/                     useLiveTiming, useF1LiveApiStatus, useCalendar
+├── hooks/                     useLiveTiming, useCalendar
+├── lib/format.ts              tempos, nomes de sessão, datas e países em português
 ├── lib/f1/
 │   ├── feed.ts                cliente SignalR da F1 (conexão, reconexão, ociosidade)
 │   ├── merge.ts               aplicação de deltas
@@ -263,7 +262,7 @@ Passo a passo, Nginx, checklist pós-deploy e dicas de cota: [docs/DEPLOY.md](do
 ```bash
 npm test         # 10 testes
 npm run build    # build + tipos
-npm run lint     # ESLint
+npm run lint     # ESLint (0 erros, 0 avisos)
 ```
 
 | Arquivo | Cobre |
@@ -272,7 +271,7 @@ npm run lint     # ESLint
 | `tests/normalize.test.ts` | Tempos de volta, sessão, pilotos, Race Control e deltas ao vivo sobre a fixture real |
 | `tests/feed.test.ts` | Hub SignalR falso: cookie, negotiate, handshake, assinatura, deltas e reconexão automática |
 
-O lint tem 3 erros e 3 avisos antigos (`set-state-in-effect` em `theme-toggle`, `countdown` e `multiview-console`) que não impedem o build. Detalhes em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md#lint).
+O lint passa sem erros nem avisos.
 
 ---
 
@@ -280,13 +279,11 @@ O lint tem 3 erros e 3 avisos antigos (`set-state-in-effect` em `theme-toggle`, 
 
 | Limitação | Motivo |
 | --- | --- |
-| Sem telemetria de carro (acelerador, freio, marcha) e sem posição no mapa | Os canais `CarData.z` e `Position.z` exigem login de assinante F1 TV. Só a velocidade do speed trap é exibida. |
+| Sem telemetria de carro (acelerador, freio, marcha) e sem posição no mapa | Os canais `CarData.z` e `Position.z` exigem login de assinante F1 TV. A API ainda devolve a velocidade do speed trap, mas a tela não a exibe. |
 | Sem replay de sessões passadas | O arquivo estático `livetiming.formula1.com/static` responde HTTP 401. |
-| Entre fins de semana, o feed traz a última sessão | Comportamento da F1. O painel compara com o calendário para não mostrar dados velhos como ao vivo. |
+| Entre fins de semana, o feed traz a última sessão | Comportamento da F1. O painel compara com o calendário e mostra esses dados como "Último resultado", não como ao vivo. |
 | Contagem regressiva só por data | O calendário local não tem os horários das sessões. |
 | Calendário é estático | Mudanças de datas exigem editar `src/data/f1-calendar.ts`. |
-| Multiview não fornece vídeos | Você precisa adicionar URLs que tem direito de exibir; alguns sites bloqueiam iframe. |
-| Contraste baixo de alguns textos do Multiview no tema claro | Pendente de correção. |
 | Endpoint da F1 não documentado | A F1 pode mudar o protocolo sem aviso. |
 | Na Vercel, cada instância tem sua própria conexão com a F1 | Funções não compartilham memória; aceitável porque cada conexão recebe o estado completo. |
 
@@ -296,8 +293,8 @@ O lint tem 3 erros e 3 avisos antigos (`set-state-in-effect` em `theme-toggle`, 
 
 | Sintoma | O que fazer |
 | --- | --- |
-| "Aguardando o início da próxima sessão ao vivo" | Normal fora dos fins de semana. Durante uma sessão, confira se o nome da etapa no calendário bate com `session.meetingName` de `/api/live-timing`. |
-| **F1 API · OFFLINE** | Veja `/api/f1-live/status`; o campo `error` explica a falha. |
+| Tabela mostra "Último resultado" | Normal fora dos fins de semana. Durante uma sessão, confira se o nome da etapa no calendário bate com `session.meetingName` de `/api/live-timing`. |
+| "Sem dados da F1 no momento" | Veja `/api/f1-live/status`; o campo `error` explica a falha. |
 | Reconexão a cada 25 s ou 290 s | Esperado em serverless (evento `reconnect`). |
 | Requisições a `/api/live-timing` a cada 2 s | O site entrou no fallback; volta ao stream em 60 s. |
 | Stream sem eventos atrás de Nginx | Use `proxy_buffering off`. |
@@ -314,7 +311,7 @@ Guia completo: [docs/SOLUCAO-DE-PROBLEMAS.md](docs/SOLUCAO-DE-PROBLEMAS.md).
 | [docs/FEED-F1.md](docs/FEED-F1.md) | Protocolo SignalR da F1 passo a passo, tipos de quadro, canais, merge de deltas |
 | [docs/API.md](docs/API.md) | Referência de todas as rotas, com exemplos de resposta |
 | [docs/MODELO-DE-DADOS.md](docs/MODELO-DE-DADOS.md) | Tipos TypeScript e regras de conversão campo a campo |
-| [docs/FRONTEND.md](docs/FRONTEND.md) | Páginas, componentes, hooks, store, tema, calendário |
+| [docs/FRONTEND.md](docs/FRONTEND.md) | Direção visual, páginas, componentes, hooks, store, tema, tokens, responsividade, acessibilidade, calendário |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Vercel, Netlify, Docker, Fly.io, Render, variáveis, checklist |
 | [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md) | Ambiente, testes, lint, convenções e receitas de extensão |
 | [docs/SOLUCAO-DE-PROBLEMAS.md](docs/SOLUCAO-DE-PROBLEMAS.md) | Diagnóstico, mensagens de erro e soluções |
@@ -335,6 +332,6 @@ Detalhes em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Aviso legal
 
-Projeto pessoal e não oficial, sem vínculo com a Formula 1, a FIA ou as equipes. "F1", "Formula 1" e marcas relacionadas pertencem aos seus donos. Os dados de cronometragem são da F1 e são exibidos apenas para acompanhamento pessoal; respeite os termos de uso da F1 e dos serviços de vídeo usados no Multiview.
+Projeto pessoal e não oficial, sem vínculo com a Formula 1, a FIA ou as equipes. "F1", "Formula 1" e marcas relacionadas pertencem aos seus donos. Os dados de cronometragem são da F1 e são exibidos apenas para acompanhamento pessoal; respeite os termos de uso da F1.
 
 O repositório ainda não define uma licença de código aberto.

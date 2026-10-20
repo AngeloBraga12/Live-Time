@@ -3,44 +3,40 @@
 import { useEffect, useState } from "react";
 import { F1_CALENDAR, F1_SEASONS, type GrandPrixEvent } from "@/data/f1-calendar";
 
-type CalendarMap = Record<number, GrandPrixEvent[]>;
+const ALL_EVENTS: GrandPrixEvent[] = F1_SEASONS.flatMap((season) => F1_CALENDAR[season]).sort((a, b) => a.raceDate.localeCompare(b.raceDate));
 
+/**
+ * Calendário embutido + data de hoje (UTC, AAAA-MM-DD).
+ *
+ * `today` começa como null: as páginas são pré-renderizadas no build, então a
+ * data só é lida no navegador, o que evita mostrar a etapa errada ou causar
+ * diferença de hidratação. Atualiza a cada minuto.
+ */
 export function useCalendar() {
-  const [now, setNow] = useState(() => new Date());
-  const [calendar, setCalendar] = useState<CalendarMap>(F1_CALENDAR);
-  const [seasons, setSeasons] = useState<number[]>([...F1_SEASONS]);
+  const [today, setToday] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadCalendar = async () => {
-      try {
-        const response = await fetch("/api/calendar", { cache: "no-store" });
-        if (!response.ok) return;
-        const data = await response.json() as { events?: CalendarMap; seasons?: number[] };
-        if (data.events && data.seasons?.length) {
-          setCalendar(data.events);
-          setSeasons(data.seasons);
-        }
-      } catch {
-        // Keep the bundled official schedule available if the local route is offline.
-      }
-    };
-    const update = () => {
-      const current = new Date();
-      setNow(current);
-    };
-    const clockInterval = setInterval(update, 60_000);
-    const refreshInterval = setInterval(() => void loadCalendar(), 5 * 60_000);
-    void loadCalendar();
-    update();
-    return () => { clearInterval(clockInterval); clearInterval(refreshInterval); };
+    const update = () => setToday(new Date().toISOString().slice(0, 10));
+    const first = setTimeout(update, 0);
+    const interval = setInterval(update, 60_000);
+    return () => { clearTimeout(first); clearInterval(interval); };
   }, []);
 
-  const today = now.toISOString().slice(0, 10);
-  const events = seasons.flatMap((season) => calendar[season] ?? []).sort((a,b) => a.raceDate.localeCompare(b.raceDate));
-  const currentEvent = events.find((event) => today >= event.startDate && today <= event.endDate)
-    ?? events.find((event) => event.raceDate >= today);
-  const nextEvent = events.find((event) => event.endDate >= today);
-  const nextAfterToday = events.find((event) => event.startDate > today);
+  if (!today) return { today, events: ALL_EVENTS, currentEvent: undefined, nextAfterToday: undefined };
 
-  return { now, calendar, seasons, currentEvent, nextEvent, nextAfterToday };
+  /** Etapa cujo fim de semana inclui hoje; senão, a próxima. */
+  const currentEvent = ALL_EVENTS.find((event) => today >= event.startDate && today <= event.endDate)
+    ?? ALL_EVENTS.find((event) => event.startDate > today);
+  /** Primeira etapa que começa depois de hoje. */
+  const nextAfterToday = ALL_EVENTS.find((event) => event.startDate > today);
+
+  return { today, events: ALL_EVENTS, currentEvent, nextAfterToday };
+}
+
+/** Compara o nome da etapa do feed com uma etapa do calendário (sem acentos, minúsculas). */
+export function feedMatchesEvent(meetingName: string, event: GrandPrixEvent | undefined) {
+  if (!event || !meetingName.trim()) return false;
+  const fold = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const meeting = fold(meetingName);
+  return [event.name, event.location, event.country].some((alias) => alias.length > 3 && meeting.includes(fold(alias)));
 }

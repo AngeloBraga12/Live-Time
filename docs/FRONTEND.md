@@ -1,46 +1,69 @@
 # Frontend
 
-Interface em Next.js 16 (App Router) com React 19, Tailwind CSS 4 (mais CSS próprio em `globals.css`), Zustand 5 e ícones lucide-react. Todas as páginas são componentes de cliente (`"use client"`).
+Interface em Next.js 16 (App Router) com React 19, Zustand 5 e ícones lucide-react. Os estilos são CSS puro em um único arquivo ([`src/app/globals.css`](../src/app/globals.css)), sem framework de CSS. A fonte Archivo é servida pelo próprio site via `next/font` (sem requisições a terceiros).
 
 ## Sumário
 
-- [Mapa de páginas](#mapa-de-páginas)
-- [Layout comum](#layout-comum)
-- [Conexão automática](#conexão-automática)
+- [Direção visual](#direção-visual)
+- [Páginas](#páginas)
+- [Estrutura de componentes](#estrutura-de-componentes)
+- [Conexão em tempo real](#conexão-em-tempo-real)
 - [Store](#store)
 - [Hooks](#hooks)
-- [Páginas](#páginas)
-- [Componentes](#componentes)
+- [Página ao vivo](#página-ao-vivo)
+- [Calendário](#calendário)
 - [Tema claro e escuro](#tema-claro-e-escuro)
+- [Tokens de design](#tokens-de-design)
+- [Responsividade](#responsividade)
+- [Acessibilidade](#acessibilidade)
 - [Dados salvos no navegador](#dados-salvos-no-navegador)
 - [Calendário local](#calendário-local)
+- [Páginas removidas](#páginas-removidas)
 
-## Mapa de páginas
+## Direção visual
 
-| Rota | Arquivo | Menu | Conteúdo |
-| --- | --- | --- | --- |
-| `/` | `src/app/page.tsx` | — | Redireciona para `/multiview` |
-| `/multiview` | `src/app/multiview/page.tsx` | Multiview | Mosaico de vídeos (1, 2 ou 4 janelas) |
-| `/timing` | `src/app/timing/page.tsx` | Live Timing | Classificação, setores, pneus e Race Control da sessão |
-| `/calendar` | `src/app/calendar/page.tsx` | Calendário | Temporadas 2026 e 2027 com contagem regressiva |
-| `/telemetry` | `src/app/telemetry/page.tsx` | Telemetria | Resumo do que o feed publicou |
-| `/race-control` | `src/app/race-control/page.tsx` | Race Control | Histórico de mensagens com contagem por severidade |
-| `/settings` | `src/app/settings/page.tsx` | Conexão | Estado do feed, endpoint e como a conexão funciona |
+O design segue a linguagem do site oficial da Fórmula 1:
 
-## Layout comum
+| Elemento | Como aparece |
+| --- | --- |
+| Cores | Preto carbono `#15151e` no cabeçalho e no topo das páginas, vermelho F1 `#e10600` só para destaques (aba ativa, selo "Ao vivo", próxima etapa), fundo off-white `#f6f4f1` e superfícies brancas. |
+| Tipografia | Archivo variável. Títulos em caixa alta com a largura expandida (`font-stretch: 125%`) e peso 800, lembrando a fonte Formula1 Wide. Texto em largura normal. Números com algarismos tabulares. |
+| Cartões | Borda fina só no topo e à direita, com o canto superior direito arredondado (14 px), como os cartões do calendário da F1. |
+| Pista | Faixa colorida abaixo do cabeçalho com o estado da pista: verde (pista livre), amarelo (bandeira amarela, safety car, VSC), vermelho (bandeira vermelha) e quadriculado (fim da sessão). |
+| Setores | Roxo = melhor da sessão; verde = melhor pessoal (cores padrão da F1). |
+| Pneus | Anel na cor do composto (vermelho macio, amarelo médio, branco/cinza duro, verde intermediário, azul chuva) com a letra e a idade em voltas. |
 
-[`SectionWorkspace`](../src/components/ui/section-workspace.tsx) envolve todas as páginas e contém:
+Sem gradientes decorativos, sem ícones em círculos coloridos, sem textos explicando o próprio site.
 
-- barra lateral com a marca "APEX" e o menu de navegação (o item ativo vem da prop `active`);
-- barra superior com o indicador **F1 LIVE** ([`F1LiveApiStatus`](../src/components/ui/f1-live-api-status.tsx)) e o botão de tema ([`ThemeToggle`](../src/components/ui/theme-toggle.tsx));
-- título e descrição da seção;
-- rodapé `APEX TIMING v0.3 · F1 LIVE TIMING · SIGNALR / SSE · ATUALIZAÇÃO · 1s`.
+## Páginas
 
-O `layout.tsx` raiz define `lang="pt-BR"` e um script inline que aplica o tema salvo antes da primeira pintura (evita piscar).
+| Rota | Arquivo | Conteúdo |
+| --- | --- | --- |
+| `/` | [`src/app/page.tsx`](../src/app/page.tsx) | Ao vivo: cabeçalho da sessão ou da próxima etapa, classificação e direção de prova |
+| `/calendar` | [`src/app/calendar/page.tsx`](../src/app/calendar/page.tsx) | Calendário 2026 e 2027 em cartões |
 
-## Conexão automática
+As duas páginas são pré-renderizadas no build (estáticas) e completadas no navegador.
 
-`SectionWorkspace` chama `useLiveTiming()`. Como toda página usa esse layout, **qualquer página aberta já conecta ao live timing**, inclusive Multiview e Calendário. Ao trocar de página, a conexão é refeita (o componente é desmontado e montado de novo).
+## Estrutura de componentes
+
+```text
+app/layout.tsx                    fonte, script de tema, link "Pular para o conteúdo"
+├── components/ui/site-header.tsx marca "APEX TIMING", navegação, botão de tema
+│   └── components/ui/theme-toggle.tsx
+├── <main>
+│   ├── app/page.tsx → components/live/live-timing.tsx
+│   │   ├── components/live/hero.tsx              SessionHero | EventHero
+│   │   ├── components/live/timing-table.tsx      TimingTable | TimingTableSkeleton
+│   │   └── components/live/race-control-panel.tsx
+│   └── app/calendar/page.tsx → components/calendar/calendar-view.tsx
+└── components/ui/site-footer.tsx
+```
+
+Funções de formatação (tempos de volta, nomes de sessão em português, estado da pista, datas, nomes de países) ficam em [`src/lib/format.ts`](../src/lib/format.ts).
+
+## Conexão em tempo real
+
+Só a página ao vivo conecta ao live timing: `LiveTiming` chama `useLiveTiming()`. O calendário não abre conexão nenhuma, o que economiza a cota gratuita da hospedagem.
 
 ```mermaid
 stateDiagram-v2
@@ -66,7 +89,7 @@ Detalhes do [`use-live-timing.ts`](../src/hooks/use-live-timing.ts):
 | `onerror` | O fim normal da janela do servidor também dispara `onerror`; o `EventSource` reabre sozinho. Só depois de **3** erros seguidos sem dados (ou se o stream ficar `CLOSED`) cai para polling. |
 | Polling | `fetch("/api/live-timing", { cache: "no-store" })` a cada 2 s. Após 60 s, tenta o stream outra vez. |
 | Navegador sem `EventSource` | Usa polling direto. |
-| Aba em segundo plano por 2 min | Fecha stream e polling para não gastar cota. Ao voltar, reabre na hora. |
+| Aba em segundo plano por 2 min | Fecha stream e polling. Ao voltar, reabre na hora. |
 | `pagehide` (saída da página) | Fecha tudo sem tratar como falha. |
 
 ## Store
@@ -81,11 +104,9 @@ Detalhes do [`use-live-timing.ts`](../src/hooks/use-live-timing.ts):
 | `connection` | `"connecting" \| "live" \| "offline"` |
 | `lastUpdate` | `emittedAt` do último snapshot |
 | `setConnection(c)` | Muda o estado de conexão |
-| `applySnapshot(s)` | Substitui sessão, pilotos e Race Control |
-| `applyTiming(s)` | Mesmo efeito; usado nas atualizações seguintes |
-| `addRaceControl(m)` | Acrescenta uma mensagem no topo (mantém 10). Não é usado pelo fluxo atual, que já recebe a lista completa. |
+| `applySnapshot(s)` / `applyTiming(s)` | Substituem sessão, pilotos e direção de prova |
 
-Uso típico em componentes, selecionando só o que precisa para evitar renderizações extras:
+Selecione só o necessário para evitar renderizações extras:
 
 ```tsx
 const drivers = useLiveTimingStore((state) => state.drivers);
@@ -95,116 +116,137 @@ const drivers = useLiveTimingStore((state) => state.drivers);
 
 | Hook | Arquivo | Faz |
 | --- | --- | --- |
-| `useLiveTiming()` | `use-live-timing.ts` | Conexão em tempo real (acima). Não retorna nada; escreve na store. |
-| `useF1LiveApiStatus()` | `use-f1-live-api-status.ts` | Consulta `/api/f1-live/status` ao abrir e a cada 10 s. Retorna o `FeedHealth` (ou um estado `CHECKING`/`OFFLINE`). |
-| `useCalendar()` | `use-calendar.ts` | Usa o calendário embutido e atualiza por `/api/calendar` ao abrir e a cada 5 min; relógio interno atualizado a cada minuto. Retorna `now`, `calendar`, `seasons`, `currentEvent`, `nextEvent`, `nextAfterToday`. |
+| `useLiveTiming()` | `use-live-timing.ts` | Conexão em tempo real (acima). Escreve na store. |
+| `useCalendar()` | `use-calendar.ts` | Devolve `today` (AAAA-MM-DD em UTC, `null` até montar no navegador), `events` (todas as etapas em ordem), `currentEvent` e `nextAfterToday`. Atualiza a data a cada minuto. |
+| `feedMatchesEvent(nome, etapa)` | `use-calendar.ts` | Diz se o nome da etapa do feed corresponde a uma etapa do calendário. |
 
-Definições do `useCalendar` (datas comparadas em UTC, formato `YYYY-MM-DD`):
+`today` começa como `null` porque as páginas são geradas no build: a data só é lida no navegador, evitando mostrar a etapa errada ou diferenças de hidratação. Enquanto isso, o cabeçalho mostra um esqueleto de carregamento.
 
 | Valor | Regra |
 | --- | --- |
-| `currentEvent` | Etapa cujo fim de semana inclui hoje; senão a primeira com corrida hoje ou depois |
-| `nextEvent` | Primeira etapa com `endDate` hoje ou depois |
+| `currentEvent` | Etapa cujo fim de semana inclui hoje; senão, a próxima a começar |
 | `nextAfterToday` | Primeira etapa que começa depois de hoje |
 
-## Páginas
+## Página ao vivo
 
-### Multiview
+[`components/live/live-timing.tsx`](../src/components/live/live-timing.tsx) decide o que mostrar:
 
-[`MultiviewConsole`](../src/components/multiview/multiview-console.tsx):
+```mermaid
+flowchart TD
+    A{Há pilotos e conexão live?} -- não --> E[EventHero da etapa atual/próxima<br/>+ esqueleto ou aviso 'Sem dados da F1']
+    A -- sim --> B{meetingName do feed = currentEvent?}
+    B -- não --> C[EventHero da etapa atual/próxima<br/>+ tabela 'Último resultado']
+    B -- sim --> D{Sessão é a corrida e terminou?}
+    D -- sim --> F[EventHero da próxima etapa<br/>+ resultado da corrida]
+    D -- não --> G[SessionHero com voltas, clima e faixa da pista<br/>+ 'Classificação ao vivo']
+```
 
-- layouts de **1, 2 ou 4** janelas (padrão 4);
-- cada fonte tem nome e URL, e é exibida em um `<iframe>` com `allow="autoplay; fullscreen; picture-in-picture"` e `referrerPolicy="no-referrer"`;
-- clicar em uma janela a torna ativa; a nova fonte é atribuída à janela ativa;
-- ações por janela: remover, recarregar, tela cheia, maximizar;
-- as fontes ficam em `localStorage["apex-multiview-feeds"]`; a atribuição janela→fonte não é salva.
+O feed da F1 guarda a última sessão entre um fim de semana e outro. Em vez de esconder esses dados, a página os mostra como **Último resultado**, com o nome da etapa e da sessão.
 
-O projeto não fornece fontes de vídeo. Use apenas URLs que você tem direito de exibir (por exemplo, players incorporáveis do seu serviço de streaming).
+### Cabeçalho (`hero.tsx`)
 
-### Timing
-
-A página principal de cronometragem, com quatro abas:
-
-| Aba | Componente | Mostra |
+| Componente | Quando | Mostra |
 | --- | --- | --- |
-| Classificação | [`LiveTimingTable`](../src/components/livetiming/live-timing-table.tsx) | Colunas POS, PILOTO (faixa na cor da equipe), GAP, INTERVALO, ÚLTIMA, MELHOR, S1, S2, S3, PNEU e VOL. Clique em um piloto para selecioná-lo. |
-| Setores | `SectorTable` (na própria página) | POS, PILOTO, S1, S2, S3 e MELHOR VOLTA, com destaque para melhor da sessão e melhor pessoal |
-| Pneus | `TyreTable` | POS, PILOTO, COMPOSTO (S, M, H, I, W), IDADE, VOLTAS e SITUAÇÃO (novo/usado) |
-| Race Control | [`RaceControlTicker`](../src/components/livetiming/race-control-ticker.tsx) | Mensagens da direção de prova; a aba exibe a quantidade |
+| `SessionHero` | Feed é da etapa atual e o fim de semana não acabou | Selo **Ao vivo** (se a sessão está rodando), etapa, circuito, nome do GP, sessão em português (Treino Livre 1, Classificação, Sprint, Corrida), volta atual/total (corridas), temperaturas do ar e da pista, e a faixa do estado da pista. |
+| `EventHero` | Fora das sessões | Selo **Próxima etapa** ou **Fim de semana em andamento**, etapa e temporada, nome do GP, circuito e cidade, datas e a contagem regressiva em dias, com link para o calendário. |
 
-Faixa de resumo: volta atual / total com barra de progresso, status da sessão ([`StatusPill`](../src/components/ui/status-pill.tsx)), temperaturas do ar e da pista.
+### Classificação (`timing-table.tsx`)
 
-#### Regra de exibição
-
-O feed da F1 mantém a última sessão entre um fim de semana e outro. Para não mostrar dados velhos como se fossem ao vivo:
-
-1. O nome da etapa no feed (`session.meetingName`, sem acentos e em minúsculas) é comparado com nome, cidade e país do `currentEvent` do calendário (apenas termos com mais de 3 letras).
-2. Só se houver correspondência **e** a conexão estiver `live`, a página mostra pilotos e Race Control (`showFeedSession`). Isso inclui sessões já encerradas do mesmo fim de semana (por exemplo, o resultado do TL1 até o TL2 começar).
-3. Se a sessão exibida for a **corrida** e estiver encerrada, o cabeçalho passa a apresentar a **próxima etapa** (`nextAfterToday`).
-4. Sem correspondência, a página mostra a etapa do calendário com "Aguardando o início da próxima sessão ao vivo...".
-
-### Calendário
-
-- seletor de temporada (2026 e 2027);
-- lista de etapas com rodada, país, circuito e datas formatadas em pt-BR por `formatWeekend` (por exemplo `23 OUT. — 25 OUT. 2026`);
-- etapas marcadas como **PRÓXIMA** ou **ENCERRADA**;
-- [`Countdown`](../src/components/ui/countdown.tsx): dias até o próximo fim de semana, ou "FIM DE SEMANA EM ANDAMENTO". A contagem é só por data, pois os horários exatos das sessões não estão no calendário local.
-
-### Telemetria
-
-Resumo a partir da store: pilotos na sessão, entradas recebidas, melhor volta e cobertura de dados (posição/voltas, setores/tempos: RECEBIDO ou AGUARDANDO; CAR DATA: INDISPONÍVEL). A telemetria de carro (acelerador, freio, marcha) depende do canal `CarData.z`, que exige login de F1 TV; por isso a página indica "Sem telemetria publicada".
-
-Diferente de `/timing`, esta página e a de Race Control exibem o que estiver na store, sem comparar com o calendário.
-
-### Race Control
-
-Contadores de mensagens recebidas, críticas (`critical`) e alertas (`warning`), e a lista completa com [`FlagMarker`](../src/components/ui/flag-marker.tsx) colorido por severidade, horário, volta e assunto (piloto ou setor).
-
-### Conexão (`/settings`)
-
-- **01 / Feed de dados**: estado (`CONECTADA`, `VERIFICANDO`, `OFFLINE`), endpoint `livetiming.formula1.com` e "ÚLTIMA ATUALIZAÇÃO" com o horário do último dado recebido;
-- **02 / Execução**: explica a conexão automática — abre sozinho, reconecta sozinho, economiza a cota gratuita;
-- resumo da plataforma.
-
-## Componentes
-
-| Componente | Arquivo | Uso |
+| Coluna | Some abaixo de | Conteúdo |
 | --- | --- | --- |
-| `SectionWorkspace` | `components/ui/section-workspace.tsx` | Layout de todas as páginas; inicia a conexão |
-| `F1LiveApiStatus` | `components/ui/f1-live-api-status.tsx` | Indicador "F1 API · CONECTADA / VERIFICANDO / OFFLINE" |
-| `ThemeToggle` | `components/ui/theme-toggle.tsx` | Alterna claro/escuro |
-| `StatusPill` | `components/ui/status-pill.tsx` | Rótulo do status da sessão |
-| `FlagMarker` | `components/ui/flag-marker.tsx` | Marcador colorido de severidade |
-| `Countdown` | `components/ui/countdown.tsx` | Contagem regressiva em dias |
-| `LiveTimingTable` | `components/livetiming/live-timing-table.tsx` | Tabela de classificação |
-| `RaceControlTicker` | `components/livetiming/race-control-ticker.tsx` | Lista de mensagens |
-| `MultiviewConsole` | `components/multiview/multiview-console.tsx` | Mosaico de vídeos |
-| `MiniSectorTrack` | `components/livetiming/mini-sector-track.tsx` | Mapa do Circuit of The Americas em três setores (SVG fixo). **Não é usado** por nenhuma página hoje. |
-| `MultiviewStrip` | `components/multiview/multiview-strip.tsx` | Faixa compacta de streams. **Não é usada** hoje. |
+| Pos | — | Posição |
+| Piloto | — | Barra na cor da equipe, sigla; nome e equipe a partir de 560 px; selo **Box** ou **Pit lane** |
+| Líder / Intervalo / Diferença | — | Corrida: alterna entre diferença para o líder e intervalo para o carro à frente (botões acima da tabela). Treino e classificação: diferença para o mais rápido. `Líder`, `Abandonou`, `Eliminado` e `Parado` aparecem por extenso. |
+| Última | 800 px | Última volta |
+| Melhor | 560 px | Melhor volta |
+| S1, S2, S3 | 1100 px | Setores, em roxo (melhor da sessão) ou verde (melhor pessoal) |
+| Pneu | — | Composto e idade em voltas (o nome completo está no `title` e no `aria-label`) |
+| Voltas | 800 px | Voltas completadas |
+
+Enquanto conecta, aparece um esqueleto com 10 linhas. Sem dados, um aviso curto.
+
+### Direção de prova (`race-control-panel.tsx`)
+
+Lista das mensagens (até 50, a mais recente primeiro) com categoria em português (Pista, Incidente, Punição, Pit lane, Clima, Sessão), volta, horário local e um ponto colorido pela severidade (vermelho crítico, amarelo alerta, verde liberação). No desktop fica fixa ao lado da tabela com rolagem própria; abaixo de 1100 px vai para baixo da tabela e mostra 8 mensagens, com o botão **Mostrar mais**.
+
+## Calendário
+
+[`components/calendar/calendar-view.tsx`](../src/components/calendar/calendar-view.tsx):
+
+- título "Calendário 2026" e seletor de temporada (2026, 2027); abre na temporada do ano atual;
+- grade de cartões (`auto-fill`, mínimo 260 px) com etapa, datas (`23 – 25 out`), país em português e caixa alta, nome oficial do GP e circuito · cidade;
+- a primeira etapa que ainda não terminou fica em **vermelho**, com o selo **Próxima · N dias** ou **Neste fim de semana**;
+- etapas passadas mostram **Encerrada**.
 
 ## Tema claro e escuro
 
-- O atributo `data-theme="light" | "dark"` fica no `<html>`.
-- Na primeira visita, segue `prefers-color-scheme` do sistema.
-- A escolha é salva em `localStorage["apex-theme"]`.
-- As regras de contraste de cada tema ficam no fim de [`globals.css`](../src/app/globals.css) (`html[data-theme="dark"] ...`).
+- O atributo `data-theme="light" | "dark"` fica no `<html>`, aplicado por um script no `<head>` antes da primeira pintura.
+- Na primeira visita, segue a preferência do sistema; a escolha fica em `localStorage["apex-theme"]`.
+- O botão no cabeçalho ([`theme-toggle.tsx`](../src/components/ui/theme-toggle.tsx)) lê o atributo com `useSyncExternalStore` e um `MutationObserver`.
+- O cabeçalho e o topo das páginas são sempre carbono; o tema muda o fundo, as superfícies e o texto.
+
+## Tokens de design
+
+Definidos no início de `globals.css` (`:root` e `html[data-theme="dark"]`):
+
+| Token | Claro | Escuro | Uso |
+| --- | --- | --- | --- |
+| `--carbon` | `#15151e` | `#15151e` | Cabeçalho, topo das páginas |
+| `--red` | `#e10600` | `#e10600` | Destaques |
+| `--paper` | `#f6f4f1` | `#0a0a0e` | Fundo da página |
+| `--surface` | `#ffffff` | `#17171f` | Tabela, cartões |
+| `--surface-2` | `#eeebe6` | `#22222d` | Hover, esqueletos |
+| `--ink` | `#15151e` | `#f3f3f5` | Texto principal |
+| `--ink-2` | `#4b4b57` | `#c0c0ca` | Texto secundário |
+| `--ink-3` | `#686874` | `#9a9aa6` | Rótulos |
+| `--red-ink` | `#c00500` | `#ff6257` | Texto vermelho, foco |
+| `--purple` / `--green` | `#8a1fcf` / `#00813c` | `#c98bff` / `#3ddc84` | Setores |
+
+Todas as combinações de texto foram medidas com no mínimo 4,5:1 de contraste (WCAG AA) nos dois temas.
+
+## Responsividade
+
+| Largura | Mudanças |
+| --- | --- |
+| < 1100 px | Direção de prova vai para baixo da tabela; setores somem |
+| < 800 px | Cabeçalho em uma coluna; somem Última e Voltas |
+| < 560 px | Somem Melhor e o nome completo do piloto; "Timing" sai da marca; botões de diferença ocupam a largura toda |
+
+A página não tem rolagem horizontal em 375 px. Se a tabela não couber, só ela rola na horizontal.
+
+## Acessibilidade
+
+- Link "Pular para o conteúdo" como primeiro item focável.
+- Um `<h1>` por página; tabela com `<th scope="col">` e o nome do piloto como `<th scope="row">`.
+- Foco visível em vermelho (`:focus-visible`).
+- Botões de alternância com `aria-pressed`; "Mostrar mais" com `aria-expanded`; faixa da pista com `role="status"`.
+- Animações (pulso do selo e esqueleto) desligadas com `prefers-reduced-motion`.
 
 ## Dados salvos no navegador
 
 | Chave | Conteúdo |
 | --- | --- |
 | `apex-theme` | `"light"` ou `"dark"` |
-| `apex-multiview-feeds` | `[{ id, name, url }]` das fontes de vídeo |
-
-Nada é enviado ao servidor; limpar os dados do site apaga essas preferências.
 
 ## Calendário local
 
-[`src/data/f1-calendar.ts`](../src/data/f1-calendar.ts) contém as temporadas 2026 (23 etapas) e 2027 (24 etapas), com fontes em `formula1.com/en/racing/<ano>`. Cada linha é `[rodada, país, cidade, nome, circuito, início, fim]`; `raceDate` é igual ao último dia.
+[`src/data/f1-calendar.ts`](../src/data/f1-calendar.ts) contém as temporadas 2026 (23 etapas) e 2027 (24 etapas). Cada linha é `[rodada, país, cidade, nome, circuito, início, fim]`; `raceDate` é igual ao último dia.
 
-Para atualizar (mudança de data, nova temporada):
+Para atualizar:
 
 1. Edite ou acrescente as linhas no array do ano.
 2. Para um ano novo, inclua-o em `F1_CALENDAR_SOURCES`, `F1_CALENDAR` e `F1_SEASONS`.
-3. Use em `name`, `location` e `country` os mesmos termos que a F1 usa no feed (em inglês). A página `/timing` depende disso para reconhecer a etapa ao vivo.
+3. Use em `name`, `location` e `country` os mesmos termos que a F1 usa no feed (em inglês): a página ao vivo depende disso para reconhecer a etapa. A tradução do país para exibição fica em `countryName()` em `src/lib/format.ts`; acrescente lá países novos.
 4. Rode `npm run build` e faça o deploy.
+
+## Páginas removidas
+
+O redesign retirou o que não entregava informação real. As rotas antigas redirecionam para `/` (configurado em [`next.config.ts`](../next.config.ts)):
+
+| Rota antiga | Motivo |
+| --- | --- |
+| `/multiview` | Mosaico de iframes sem fonte de vídeo; serviços como F1 TV não permitem incorporação. |
+| `/timing` | Virou a página inicial `/`. |
+| `/telemetry` | A telemetria de carro exige login de F1 TV; a página mostrava quase só "indisponível". |
+| `/race-control` | Duplicava a lista que já aparece ao lado da classificação. |
+| `/settings` | Mostrava detalhes técnicos da conexão, sem utilidade para quem acompanha a corrida. O estado continua em `/api/f1-live/status`. |

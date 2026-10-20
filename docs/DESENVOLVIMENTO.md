@@ -27,7 +27,7 @@ Guia para rodar, testar e modificar o projeto localmente.
 | npm | o que acompanha o Node |
 | Git | qualquer versão recente |
 
-Versões instaladas pelo `package-lock.json` no momento desta documentação: Next.js 16.4.0, React 19.3.0, Zustand 5.0.15, ws 8.22.0, lucide-react 0.468.0, Tailwind CSS 4.3.3, TypeScript 5.9.3, tsx 4.23.15.
+Versões instaladas pelo `package-lock.json` no momento desta documentação: Next.js 16.4.0, React 19.3.0, Zustand 5.0.15, ws 8.22.0, lucide-react 0.468.0, TypeScript 5.9.3, tsx 4.23.15.
 
 ## Primeiros passos
 
@@ -56,15 +56,11 @@ Abra [http://localhost:3000](http://localhost:3000). O servidor de desenvolvimen
 Live-Time/
 ├── src/
 │   ├── app/                      # App Router (páginas e rotas de API)
-│   │   ├── layout.tsx            # HTML raiz, lang pt-BR, script de tema
-│   │   ├── globals.css           # Estilos (Tailwind + CSS próprio, temas)
-│   │   ├── page.tsx              # "/" → redireciona para /multiview
-│   │   ├── multiview/page.tsx
-│   │   ├── timing/page.tsx
-│   │   ├── calendar/page.tsx
-│   │   ├── telemetry/page.tsx
-│   │   ├── race-control/page.tsx
-│   │   ├── settings/page.tsx     # "Conexão"
+│   │   ├── layout.tsx            # HTML raiz, lang pt-BR, fonte Archivo, script de tema, cabeçalho e rodapé
+│   │   ├── globals.css           # Todos os estilos (CSS puro, tokens, temas)
+│   │   ├── icon.svg              # ícone do site
+│   │   ├── page.tsx              # "/" → ao vivo
+│   │   ├── calendar/page.tsx     # "/calendar"
 │   │   └── api/
 │   │       ├── live-timing/route.ts          # snapshot JSON
 │   │       ├── live-timing/stream/route.ts   # SSE
@@ -72,11 +68,12 @@ Live-Time/
 │   │       ├── health/route.ts
 │   │       └── calendar/route.ts
 │   ├── components/
-│   │   ├── livetiming/           # tabela, Race Control, mapa da pista
-│   │   ├── multiview/            # mosaico de vídeos
-│   │   └── ui/                   # layout, status, tema, contagem
+│   │   ├── live/                 # live-timing, hero, timing-table, race-control-panel
+│   │   ├── calendar/             # calendar-view
+│   │   └── ui/                   # site-header, site-footer, theme-toggle
 │   ├── data/f1-calendar.ts       # calendário 2026–2027
-│   ├── hooks/                    # useLiveTiming, useF1LiveApiStatus, useCalendar
+│   ├── hooks/                    # useLiveTiming, useCalendar
+│   ├── lib/format.ts             # formatação e textos em português
 │   ├── lib/f1/
 │   │   ├── feed.ts               # cliente SignalR da F1 (singleton)
 │   │   ├── merge.ts              # aplicação de deltas
@@ -91,8 +88,8 @@ Live-Time/
 │   └── fixtures/singapore-2026-race.json
 ├── docs/                         # esta documentação
 ├── Dockerfile, fly.toml, render.yaml, netlify.toml
-├── next.config.ts                # serverExternalPackages: ["ws"], reactStrictMode
-├── eslint.config.mjs, postcss.config.mjs, tsconfig.json
+├── next.config.ts                # serverExternalPackages: ["ws"], reactStrictMode, redirecionamentos das rotas antigas
+├── eslint.config.mjs, tsconfig.json
 └── .env.example
 ```
 
@@ -126,18 +123,12 @@ npx tsx --test tests/normalize.test.ts
 npm run lint
 ```
 
-Estado atual: 3 erros e 3 avisos (6 problemas) herdados de versões anteriores, que **não impedem o build**:
+Estado atual: **0 erros e 0 avisos**. Mantenha assim; o Pull Request deve passar em `npm run lint`.
 
-| Arquivo | Regra | Situação |
-| --- | --- | --- |
-| `components/ui/theme-toggle.tsx` | `react-hooks/set-state-in-effect` | `setState` dentro de `useEffect` para ler o tema inicial |
-| `components/ui/countdown.tsx` | `react-hooks/set-state-in-effect` | idem para o relógio |
-| `components/multiview/multiview-console.tsx` | `react-hooks/set-state-in-effect` | idem para ler o `localStorage` |
-| `hooks/use-calendar.ts` | `no-unused-vars` (aviso) | `updateClock` declarado e não usado |
-| `app/calendar/page.tsx` | `exhaustive-deps` (aviso) | `events` recalculado a cada renderização dentro de `useMemo` |
-| `postcss.config.mjs` | `no-anonymous-default-export` (aviso) | objeto exportado sem nome |
+Padrões adotados para não cair na regra `react-hooks/set-state-in-effect`:
 
-Corrigir esses pontos é uma boa primeira contribuição (por exemplo, inicializar o estado com uma função em `useState` ou usar `useSyncExternalStore`).
+- valores que vêm do navegador (tema no `<html>`) são lidos com `useSyncExternalStore`;
+- valores que dependem da data atual (`useCalendar`) começam como `null` e são definidos dentro de um `setTimeout` ou `setInterval`, nunca de forma síncrona no efeito.
 
 ## Convenções
 
@@ -171,9 +162,11 @@ Lembre-se: canais terminados em `.z` (`CarData.z`, `Position.z`) exigem login de
 
 ### Adicionar uma página
 
-1. Crie `src/app/minha-pagina/page.tsx` com `"use client"`.
-2. Envolva o conteúdo em `<SectionWorkspace active="/minha-pagina" title="..." description="...">`; isso já conecta ao live timing.
-3. Para aparecer no menu, inclua `["/minha-pagina", "Nome", Icone]` no array `links` de `components/ui/section-workspace.tsx` (o ícone vem do `lucide-react`).
+1. Crie `src/app/minha-pagina/page.tsx`. Exporte `metadata = { title: "Minha página" }` (o layout completa com " · Apex Timing").
+2. Coloque o conteúdo de cliente em um componente em `src/components/<area>/` com `"use client"`. Cabeçalho e rodapé já vêm do `layout.tsx`.
+3. Para receber dados ao vivo, chame `useLiveTiming()` nesse componente (só a página inicial faz isso hoje) e leia a store com `useLiveTimingStore`.
+4. Para aparecer no menu, inclua `{ href: "/minha-pagina", label: "Nome" }` no array `LINKS` de `components/ui/site-header.tsx`.
+5. Use os tokens de `globals.css` (`--ink`, `--surface`, `--red` etc.) e as classes existentes (`page-hero`, `container`, `eyebrow`, `card-corner`) para manter o visual.
 
 ### Atualizar a fixture de testes
 

@@ -55,7 +55,7 @@ Não existe nenhum processo separado. O mesmo servidor Next.js que entrega as p�
 
 1. **Gratuito.** Rodar no plano Hobby da Vercel (ou no gratuito da Netlify) sem custo e sem chaves de API.
 2. **Zero configuração.** Nenhuma variável de ambiente obrigatória; o deploy padrão já funciona.
-3. **Conexão automática.** Abrir qualquer página do site basta para começar a receber dados.
+3. **Conexão automática.** Abrir o site (página inicial) basta para começar a receber dados. O calendário não abre conexão.
 4. **Tempo real.** Atualizações a cada ~1 s durante a sessão.
 5. **Resiliência.** Recuperar sozinho de quedas de rede, instâncias congeladas, limites de duração das funções e falhas de streaming.
 6. **Economia de cota.** Não manter conexões quando ninguém está olhando.

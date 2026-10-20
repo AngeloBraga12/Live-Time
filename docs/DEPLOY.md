@@ -174,7 +174,7 @@ curl -N --max-time 5 $BASE/api/live-timing/stream   # retry: 500 e event: snapsh
 
 No navegador:
 
-1. Abra `/timing`: o indicador do topo deve mostrar **F1 API · CONECTADA**.
+1. Abra `/`: a tabela deve carregar os pilotos (ao vivo ou como "Último resultado"), sem a mensagem "Sem dados da F1 no momento".
 2. Em DevTools → Network, filtre por `stream`: deve haver uma requisição `eventsource` recebendo eventos.
 3. Fora de fins de semana, a página mostra a próxima etapa; isso é esperado.
 
