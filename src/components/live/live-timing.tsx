@@ -20,7 +20,11 @@ export function LiveTiming() {
   const { today, currentEvent, nextAfterToday } = useCalendar();
   const [gapMode, setGapMode] = useState<GapMode>("leader");
 
-  const hasData = connection === "live" && drivers.length > 0;
+  const cachedAt = useLiveTimingStore((state) => state.cachedAt);
+
+  // Dados na tela != feed vivo: com o feed no ar ainda mostramos a última classificação.
+  const hasData = drivers.length > 0;
+  const showingCache = connection === "cached" && hasData;
   // O feed da F1 guarda a última sessão entre um fim de semana e outro: só é "atual" se for a etapa do calendário.
   const isCurrentWeekend = hasData && feedMatchesEvent(session.meetingName, currentEvent);
   const weekendDone = isCurrentWeekend && session.sessionName.trim().toLowerCase() === "race" && isSessionOver(session);
@@ -34,6 +38,14 @@ export function LiveTiming() {
     {showSessionHero
       ? <SessionHero session={session} event={currentEvent} running={running} track={track} />
       : <EventHero event={heroEvent} today={today} />}
+
+    {showingCache && <p className="notice container" role="status">
+      <strong>O feed da Fórmula 1 está sem sessão no ar.</strong> Esta é a última classificação registrada
+      {cachedAt ? ` (${cachedAt.slice(0, 16).replace("T", " ")})` : ""}. O painel volta ao vivo sozinho quando a próxima sessão começar.
+    </p>}
+    {!hasData && connection === "offline" && <p className="notice container" role="status">
+      <strong>Conexão com o feed interrompida.</strong> Nova tentativa automática em curso.
+    </p>}
 
     <div className="live-body container">
       <section className="board" aria-labelledby="board-title">

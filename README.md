@@ -1,5 +1,9 @@
 # Apex Timing (Live-Time)
 
+## Enciclopédia de pilotos
+
+O diretório de pilotos está em [`/drivers`](src/app/drivers/page.tsx), com fichas históricas em `/driver/{driverId}`. Escopo, data de corte, critérios de confirmação contratual, fontes e lacunas atuais estão em [docs/enciclopedia-pilotos.md](docs/enciclopedia-pilotos.md). O recorte atual tem data de 5 de novembro de 2026.
+
 Painel web para acompanhar o **live timing da Fórmula 1 em tempo real**, de graça e sem chave de API: classificação, diferenças, setores, pneus, clima, estado da pista, mensagens da direção de prova e o calendário da temporada, com visual inspirado no site oficial da F1.
 
 **Site no ar:** [live-time-silk.vercel.app](https://live-time-silk.vercel.app) — publicado automaticamente pela Vercel a cada merge na `main`.
@@ -15,6 +19,7 @@ Abra o site  →  o navegador conecta sozinho  →  o servidor fala com a F1  �
 - [Destaques](#destaques)
 - [Como funciona](#como-funciona)
 - [Páginas](#páginas)
+- [Fontes de dados](#fontes-de-dados)
 - [Tecnologias](#tecnologias)
 - [Começando](#começando)
 - [Scripts](#scripts)
@@ -90,12 +95,19 @@ Detalhes: [docs/ARQUITETURA.md](docs/ARQUITETURA.md) e [docs/FEED-F1.md](docs/FE
 | --- | --- | --- |
 | `/` | Ao vivo | Topo escuro com a sessão (selo **Ao vivo**, etapa, circuito, volta atual/total, temperaturas do ar e da pista e faixa colorida do estado da pista) ou, fora das sessões, a próxima etapa com contagem regressiva. Abaixo, a classificação (posição, piloto, diferença para o líder ou intervalo, última e melhor volta, S1–S3, pneu e voltas) e a lista da direção de prova. |
 | `/calendar` | Calendário | Temporadas 2026 (23 etapas) e 2027 (24 etapas) em cartões, com a próxima etapa em vermelho e as passadas marcadas como encerradas. |
+| `/standings` | Campeonato | Classificação anual de pilotos e construtores, com pontos, vitórias e evolução de posição. |
+| `/driver/[id]` | Perfil do piloto | Estatísticas de carreira e resultados por temporada usando o identificador Ergast do piloto. |
+| `/team/[id]` | Perfil da equipe | Histórico do construtor e pilotos associados ao identificador Ergast da equipe. |
 
 As rotas antigas (`/timing`, `/multiview`, `/telemetry`, `/race-control`, `/settings`) redirecionam para `/`.
 
 No cabeçalho: marca, navegação e botão de tema claro/escuro (a escolha fica salva no navegador).
 
 Detalhes de cada página, componentes, hooks e store: [docs/FRONTEND.md](docs/FRONTEND.md).
+
+## Fontes de dados
+
+O live timing usa o feed público SignalR da F1. Campeonato, perfis e resultados históricos usam uma API compatível com Ergast, com Jolpica como espelho primário. Os traçados são SVGs locais atribuídos ao projeto f1db. Origens, fallbacks, cache e atribuições: [docs/FONTES-DE-DADOS.md](docs/FONTES-DE-DADOS.md).
 
 ---
 
@@ -170,6 +182,7 @@ curl -N http://localhost:3000/api/live-timing/stream
 | `F1_STREAM_SECONDS` | 290 na Vercel, 25 na Netlify, 1800 nos demais | Duração de cada stream SSE antes de o navegador reabrir. Deve ficar abaixo do limite da plataforma. |
 | `F1_LIVETIMING_API_URL` | vazio | Usa uma instância externa da f1-livetiming-api em vez da conexão direta (modo `external`). |
 | `F1_SIGNALR_URL` | `https://livetiming.formula1.com/signalrcore` | Endereço do hub SignalR. Usado em testes com um hub falso. |
+| `ERGAST_BASE_URL` | `https://api.jolpi.ca/ergast/f1` | Sobrescreve a base da API compatível com Ergast usada em classificação e históricos. |
 | `PORT` | 3000 | Porta do `npm start`. |
 
 ---
@@ -183,6 +196,9 @@ curl -N http://localhost:3000/api/live-timing/stream
 | `GET /api/f1-live/status` | `{ service, mode, connected, status, lastMessageAt, uptimeSeconds, ... }` | CDN 2 s |
 | `GET /api/health` | `{ ok: true, site: "up", feed }`, sempre 200 | nenhum |
 | `GET /api/calendar` | `{ seasons, events, sources, nextEvent }` | 5 min |
+| `GET /api/standings?season=2026` | Classificação de pilotos e construtores | 5 min |
+| `GET /api/driver/{id}` | Perfil e histórico do piloto | 1 h; revalida até 24 h |
+| `GET /api/constructor/{id}` | Perfil e histórico do construtor | 1 h; revalida até 24 h |
 
 Exemplo de uso do stream:
 
@@ -204,12 +220,19 @@ Formatos completos, exemplos e códigos de status: [docs/API.md](docs/API.md). T
 ```text
 src/
 ├── app/                       páginas e rotas de API (App Router)
-│   ├── api/live-timing/       snapshot JSON e stream SSE
-│   ├── api/f1-live/status/    estado da conexão
-│   ├── api/health/            health check
-│   ├── api/calendar/          calendário
+│   ├── api/                   rotas HTTP
+│   │   ├── live-timing/       snapshot JSON e stream SSE
+│   │   ├── f1-live/status/    estado da conexão
+│   │   ├── health/            health check
+│   │   ├── calendar/          calendário
+│   │   ├── standings/         campeonato
+│   │   ├── driver/[id]/       histórico de piloto
+│   │   └── constructor/[id]/  histórico de construtor
 │   ├── page.tsx               "/" (ao vivo)
 │   ├── calendar/page.tsx      "/calendar"
+│   ├── standings/             "/standings"
+│   ├── driver/[id]/           "/driver/{id}"
+│   ├── team/[id]/             "/team/{id}"
 │   ├── layout.tsx             HTML raiz, fonte, tema, cabeçalho e rodapé
 │   └── globals.css            estilos, tokens e temas
 ├── components/
@@ -217,13 +240,17 @@ src/
 │   ├── calendar/              cartões do calendário
 │   └── ui/                    cabeçalho, rodapé, botão de tema
 ├── data/f1-calendar.ts        calendário 2026 e 2027
-├── hooks/                     useLiveTiming, useCalendar
+├── data/circuits-meta.ts      metadados dos circuitos
+├── hooks/                     useLiveTiming, useCalendar, useChampionship
 ├── lib/format.ts              tempos, nomes de sessão, datas e países em português
 ├── lib/f1/
 │   ├── feed.ts                cliente SignalR da F1 (conexão, reconexão, ociosidade)
 │   ├── merge.ts               aplicação de deltas
 │   ├── normalize.ts           conversão para o formato do painel
 │   └── source.ts              modo direto ou API externa
+│   ├── ergast.ts              cliente da API compatível com Ergast
+│   ├── standings.ts           classificação do campeonato
+│   ├── history.ts             históricos de pilotos e construtores
 ├── store/live-timing-store.ts store Zustand
 └── types/live-timing.ts       tipos do domínio
 tests/                         testes e fixture real
@@ -262,7 +289,7 @@ Passo a passo, Nginx, checklist pós-deploy e dicas de cota: [docs/DEPLOY.md](do
 ```bash
 npm test         # 10 testes
 npm run build    # build + tipos
-npm run lint     # ESLint (0 erros, 0 avisos)
+npm run lint     # ESLint (0 erros; há avisos em alguns hooks e imagens)
 ```
 
 | Arquivo | Cobre |
@@ -271,7 +298,7 @@ npm run lint     # ESLint (0 erros, 0 avisos)
 | `tests/normalize.test.ts` | Tempos de volta, sessão, pilotos, Race Control e deltas ao vivo sobre a fixture real |
 | `tests/feed.test.ts` | Hub SignalR falso: cookie, negotiate, handshake, assinatura, deltas e reconexão automática |
 
-O lint passa sem erros nem avisos.
+Na cópia local atual, o lint conclui com **0 erros e 6 avisos**: dois avisos de `<img>`, dois de dependências de hooks e dois símbolos não usados. Eles não impedem o build.
 
 ---
 
@@ -280,7 +307,7 @@ O lint passa sem erros nem avisos.
 | Limitação | Motivo |
 | --- | --- |
 | Sem telemetria de carro (acelerador, freio, marcha) e sem posição no mapa | Os canais `CarData.z` e `Position.z` exigem login de assinante F1 TV. A API ainda devolve a velocidade do speed trap, mas a tela não a exibe. |
-| Sem replay de sessões passadas | O arquivo estático `livetiming.formula1.com/static` responde HTTP 401. |
+| Arquivo oficial de sessões passadas indisponível | A F1 mantém o feed de timing da sessão mais recente; resultados e estatísticas históricas vêm do espelho Ergast e não incluem telemetria nem replay. |
 | Entre fins de semana, o feed traz a última sessão | Comportamento da F1. O painel compara com o calendário e mostra esses dados como "Último resultado", não como ao vivo. |
 | Contagem regressiva só por data | O calendário local não tem os horários das sessões. |
 | Calendário é estático | Mudanças de datas exigem editar `src/data/f1-calendar.ts`. |
@@ -315,6 +342,7 @@ Guia completo: [docs/SOLUCAO-DE-PROBLEMAS.md](docs/SOLUCAO-DE-PROBLEMAS.md).
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Vercel, Netlify, Docker, Fly.io, Render, variáveis, checklist |
 | [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md) | Ambiente, testes, lint, convenções e receitas de extensão |
 | [docs/SOLUCAO-DE-PROBLEMAS.md](docs/SOLUCAO-DE-PROBLEMAS.md) | Diagnóstico, mensagens de erro e soluções |
+| [docs/FONTES-DE-DADOS.md](docs/FONTES-DE-DADOS.md) | Origens de live timing, campeonato, histórico e mapas; fallbacks e atribuições |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Fluxo de branches, PRs e checklist |
 | [CHANGELOG.md](CHANGELOG.md) | Histórico de mudanças |
 

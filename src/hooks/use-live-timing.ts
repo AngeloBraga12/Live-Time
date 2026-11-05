@@ -27,8 +27,13 @@ export function useLiveTiming() {
   const setConnection = useLiveTimingStore((state) => state.setConnection);
   const applySnapshot = useLiveTimingStore((state) => state.applySnapshot);
   const applyTiming = useLiveTimingStore((state) => state.applyTiming);
+  const hydrateFromCache = useLiveTimingStore((state) => state.hydrateFromCache);
 
   useEffect(() => {
+    // Mostra imediatamente a última classificação já vista neste navegador,
+    // enquanto a conexão com a F1 ainda responde (ou se ela estiver no ar).
+    hydrateFromCache();
+
     let active = true;
     let hasSnapshot = false;
     let source: EventSource | null = null;
@@ -41,7 +46,18 @@ export function useLiveTiming() {
 
     const apply = (result: LiveTimingPollResponse) => {
       if (!active) return;
-      if (!result.connected || !result.snapshot) { setConnection("offline"); return; }
+      if (!result.snapshot) {
+        // Sem dados: mantém a tela com o que já aparece e só ajusta o selo.
+        setConnection(useLiveTimingStore.getState().drivers.length > 0
+          ? (useLiveTimingStore.getState().connection === "live" ? "offline" : "cached")
+          : "offline");
+        return;
+      }
+      if (result.stale) {
+        applySnapshot(result.snapshot, { cached: true });
+        setConnection("cached");
+        return;
+      }
       if (hasSnapshot) applyTiming(result.snapshot);
       else { applySnapshot(result.snapshot); hasSnapshot = true; }
       setConnection("live");
@@ -78,14 +94,15 @@ export function useLiveTiming() {
         streamFailures = 0;
         try { apply(JSON.parse((event as MessageEvent<string>).data) as LiveTimingPollResponse); } catch { /* quadro inválido */ }
       });
-      stream.addEventListener("offline", () => { streamFailures = 0; if (active) setConnection("offline"); });
+      stream.addEventListener("offline", () => {
+        streamFailures = 0;
+        if (!active) return;
+        setConnection(hasSnapshot || useLiveTimingStore.getState().drivers.length > 0 ? "cached" : "offline");
+      });
       stream.onerror = () => {
-        // O fim normal da janela do servidor também cai aqui; o EventSource reabre sozinho.
         streamFailures += 1;
-        if (streamFailures < MAX_STREAM_FAILURES && stream.readyState !== EventSource.CLOSED) return;
         closeStream();
         if (!active) return;
-        if (!hasSnapshot) setConnection("connecting");
         void poll();
         retryTimer = window.setTimeout(() => { streamFailures = 0; openStream(); }, STREAM_RETRY_MS);
       };
@@ -103,7 +120,8 @@ export function useLiveTiming() {
     // Ao sair da página o navegador fecha o stream; não é falha, não cai para polling.
     const onPageHide = () => { active = false; closeStream(); stopPolling(); };
 
-    setConnection("connecting");
+    if (useLiveTimingStore.getState().drivers.length === 0) setConnection("connecting");
+    void poll();
     openStream();
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pagehide", onPageHide);

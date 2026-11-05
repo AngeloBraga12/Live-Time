@@ -1,0 +1,414 @@
+{
+ "chosen": {
+  "australia": {
+   "file": "australia.svg",
+   "commons_file": "File:2023 F1 CourseLayout Australia.svg",
+   "bytes": 46984,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/2023_F1_CourseLayout_Australia.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2023_F1_CourseLayout_Australia.svg",
+   "analysis": {
+    "viewBox": "0 0 607.8 385.1",
+    "width": null,
+    "height": null,
+    "paths": 224,
+    "polylines": 3,
+    "path_chars": 30126,
+    "coords": 6648,
+    "viewBox_final": "0 0 607.8 385.1"
+   }
+  },
+  "austria": {
+   "file": "austria.svg",
+   "commons_file": "File:2022 F1 CourseLayout Austria.svg",
+   "bytes": 59377,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/2022_F1_CourseLayout_Austria.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Austria.svg",
+   "analysis": {
+    "viewBox": "0 0 646.9 425.4",
+    "width": null,
+    "height": null,
+    "paths": 297,
+    "polylines": 3,
+    "path_chars": 37426,
+    "coords": 8314,
+    "viewBox_final": "0 0 646.9 425.4"
+   }
+  },
+  "azerbaijan": {
+   "file": "azerbaijan.svg",
+   "commons_file": "File:2023 F1 CourseLayout Azerbaijan.svg",
+   "bytes": 42075,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/af/2023_F1_CourseLayout_Azerbaijan.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2023_F1_CourseLayout_Azerbaijan.svg",
+   "analysis": {
+    "viewBox": "0 0 610.6 333.6",
+    "width": null,
+    "height": null,
+    "paths": 184,
+    "polylines": 3,
+    "path_chars": 25097,
+    "coords": 5694,
+    "viewBox_final": "0 0 610.6 333.6"
+   }
+  },
+  "bahrain": {
+   "file": "bahrain.svg",
+   "commons_file": "File:2022 F1 CourseLayout Bahrain.svg",
+   "bytes": 50979,
+   "license": "CC BY-SA 3.0",
+   "artist": "ごひょううべこ (talk) 05:56, 16 March 2022 (UTC)",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/db/2022_F1_CourseLayout_Bahrain.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Bahrain.svg",
+   "analysis": {
+    "viewBox": "0 0 559.6 447",
+    "width": null,
+    "height": null,
+    "paths": 265,
+    "polylines": 3,
+    "path_chars": 32899,
+    "coords": 7426,
+    "viewBox_final": "0 0 559.6 447"
+   }
+  },
+  "belgium": {
+   "file": "belgium.svg",
+   "commons_file": "File:2022 F1 CourseLayout Belgium.svg",
+   "bytes": 41254,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/69/2022_F1_CourseLayout_Belgium.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Belgium.svg",
+   "analysis": {
+    "viewBox": "0 0 550 443.7",
+    "width": null,
+    "height": null,
+    "paths": 168,
+    "polylines": 3,
+    "path_chars": 23596,
+    "coords": 5269,
+    "viewBox_final": "0 0 550 443.7"
+   }
+  },
+  "brazil": {
+   "file": "brazil.svg",
+   "commons_file": "File:2022 F1 CourseLayout São Paulo.svg",
+   "bytes": 46264,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/2022_F1_CourseLayout_S%C3%A3o_Paulo.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_S%C3%A3o_Paulo.svg",
+   "analysis": {
+    "viewBox": "0 0 550 443.7",
+    "width": null,
+    "height": null,
+    "paths": 218,
+    "polylines": 3,
+    "path_chars": 28033,
+    "coords": 6259,
+    "viewBox_final": "0 0 550 443.7"
+   }
+  },
+  "canada": {
+   "file": "canada.svg",
+   "commons_file": "File:2022 F1 CourseLayout Canada.svg",
+   "bytes": 46575,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/45/2022_F1_CourseLayout_Canada.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Canada.svg",
+   "analysis": {
+    "viewBox": "0 0 558.9 299.3",
+    "width": null,
+    "height": null,
+    "paths": 213,
+    "polylines": 3,
+    "path_chars": 27873,
+    "coords": 6274,
+    "viewBox_final": "0 0 558.9 299.3"
+   }
+  },
+  "china": {
+   "file": "china.svg",
+   "commons_file": "File:Shanghai International Racing Circuit track map.svg",
+   "bytes": 51047,
+   "license": "CC BY-SA 3.0",
+   "artist": "Will Pittenger",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/1/14/Shanghai_International_Racing_Circuit_track_map.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Shanghai_International_Racing_Circuit_track_map.svg",
+   "analysis": {
+    "viewBox": null,
+    "width": "1207.0945",
+    "height": "764.54279",
+    "paths": 37,
+    "polylines": 0,
+    "path_chars": 13904,
+    "coords": 1636,
+    "viewBox_added": "0 0 1207.09 764.543",
+    "viewBox_final": "0 0 1207.09 764.543"
+   }
+  },
+  "hungary": {
+   "file": "hungary.svg",
+   "commons_file": "File:2022 F1 CourseLayout Hungary.svg",
+   "bytes": 33700,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/2022_F1_CourseLayout_Hungary.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Hungary.svg",
+   "analysis": {
+    "viewBox": "0 0 425.8 443.7",
+    "width": null,
+    "height": null,
+    "paths": 116,
+    "polylines": 3,
+    "path_chars": 16530,
+    "coords": 3774,
+    "viewBox_final": "0 0 425.8 443.7"
+   }
+  },
+  "italy": {
+   "file": "italy.svg",
+   "commons_file": "File:2022 F1 CourseLayout Italia.svg",
+   "bytes": 37979,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/2022_F1_CourseLayout_Italia.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Italia.svg",
+   "analysis": {
+    "viewBox": "0 0 550 443.7",
+    "width": null,
+    "height": null,
+    "paths": 170,
+    "polylines": 3,
+    "path_chars": 22550,
+    "coords": 5058,
+    "viewBox_final": "0 0 550 443.7"
+   }
+  },
+  "japan": {
+   "file": "japan.svg",
+   "commons_file": "File:2022 F1 CourseLayout Japan.svg",
+   "bytes": 33591,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/3/32/2022_F1_CourseLayout_Japan.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Japan.svg",
+   "analysis": {
+    "viewBox": "0 0 550 443.7",
+    "width": null,
+    "height": null,
+    "paths": 133,
+    "polylines": 3,
+    "path_chars": 19295,
+    "coords": 4307,
+    "viewBox_final": "0 0 550 443.7"
+   }
+  },
+  "madrid": {
+   "file": "madrid.svg",
+   "commons_file": "File:Madring (2026).svg",
+   "bytes": 70699,
+   "license": "CC BY-SA 3.0",
+   "artist": "GabrielStella, Cherkash",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Madring_%282026%29.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Madring_(2026).svg",
+   "analysis": {
+    "viewBox": "0 0 199.89001 134.17325",
+    "width": "755.48981",
+    "height": "507.11093",
+    "paths": 65,
+    "polylines": 0,
+    "path_chars": 37227,
+    "coords": 4473,
+    "viewBox_final": "0 0 199.89001 134.17325"
+   }
+  },
+  "malaysia": {
+   "file": "malaysia.svg",
+   "commons_file": "File:Sepang.svg",
+   "bytes": 55381,
+   "license": "CC BY-SA 3.0",
+   "artist": "Will Pittenger",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/67/Sepang.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Sepang.svg",
+   "analysis": {
+    "viewBox": null,
+    "width": "1145.6632",
+    "height": "945.31122",
+    "paths": 37,
+    "polylines": 0,
+    "path_chars": 18425,
+    "coords": 1872,
+    "viewBox_added": "0 0 1145.66 945.311",
+    "viewBox_final": "0 0 1145.66 945.311"
+   }
+  },
+  "mexico": {
+   "file": "mexico.svg",
+   "commons_file": "File:2022 F1 CourseLayout Mexico.svg",
+   "bytes": 52447,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/2e/2022_F1_CourseLayout_Mexico.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Mexico.svg",
+   "analysis": {
+    "viewBox": "0 0 550 443.7",
+    "width": null,
+    "height": null,
+    "paths": 254,
+    "polylines": 3,
+    "path_chars": 31931,
+    "coords": 7270,
+    "viewBox_final": "0 0 550 443.7"
+   }
+  },
+  "miami": {
+   "file": "miami.svg",
+   "commons_file": "File:2022 F1 CourseLayout Miami.svg",
+   "bytes": 70224,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/2022_F1_CourseLayout_Miami.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Miami.svg",
+   "analysis": {
+    "viewBox": "0 0 794.1 434",
+    "width": null,
+    "height": null,
+    "paths": 353,
+    "polylines": 3,
+    "path_chars": 45209,
+    "coords": 10005,
+    "viewBox_final": "0 0 794.1 434"
+   }
+  },
+  "monaco": {
+   "file": "monaco.svg",
+   "commons_file": "File:2022 F1 CourseLayout Monaco.svg",
+   "bytes": 36675,
+   "license": "CC BY-SA 4.0",
+   "artist": "ごひょううべこ",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/2022_F1_CourseLayout_Monaco.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Monaco.svg",
+   "analysis": {
+    "viewBox": "0 0 713.8 348.1",
+    "width": null,
+    "height": null,
+    "paths": 142,
+    "polylines": 3,
+    "path_chars": 21529,
+    "coords": 4813,
+    "viewBox_final": "0 0 713.8 348.1"
+   }
+  },
+  "netherlands": null,
+  "portugal": {
+   "file": "portugal.svg",
+   "commons_file": "File:Autódromo do Algarve F1 Sectors.svg",
+   "bytes": 69556,
+   "license": "CC BY-SA 4.0",
+   "artist": "GabrielStella",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Aut%C3%B3dromo_do_Algarve_F1_Sectors.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_do_Algarve_F1_Sectors.svg",
+   "analysis": {
+    "viewBox": null,
+    "width": "1103",
+    "height": "538",
+    "paths": 104,
+    "polylines": 0,
+    "path_chars": 62776,
+    "coords": 9081,
+    "viewBox_added": "0 0 1103 538",
+    "viewBox_final": "0 0 1103 538"
+   }
+  },
+  "qatar": {
+   "file": "qatar.svg",
+   "commons_file": "File:Lusail International Circuit 2023.svg",
+   "bytes": 45945,
+   "license": "CC BY-SA 3.0",
+   "artist": "Losail.svg: Will Pittenger derivative work: Gpmat",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Lusail_International_Circuit_2023.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Lusail_International_Circuit_2023.svg",
+   "analysis": {
+    "viewBox": null,
+    "width": "1201.3054",
+    "height": "892.91034",
+    "paths": 15,
+    "polylines": 0,
+    "path_chars": 12518,
+    "coords": 1424,
+    "viewBox_added": "0 0 1201.31 892.91",
+    "viewBox_final": "0 0 1201.31 892.91"
+   }
+  },
+  "saudi-arabia": {
+   "file": "saudi-arabia.svg",
+   "commons_file": "File:Jeddah Street Circuit 2021.svg",
+   "bytes": 24572,
+   "license": "CC BY-SA 3.0",
+   "artist": "GabrielStella",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Jeddah_Street_Circuit_2021.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Jeddah_Street_Circuit_2021.svg",
+   "analysis": {
+    "viewBox": "0 0 529.17 330.73",
+    "width": "2e3",
+    "height": "1250",
+    "paths": 25,
+    "polylines": 0,
+    "path_chars": 12459,
+    "coords": 1764,
+    "viewBox_final": "0 0 529.17 330.73"
+   }
+  },
+  "singapore": {
+   "file": "singapore.svg",
+   "commons_file": "File:Marina Bay circuit 2023.svg",
+   "bytes": 35709,
+   "license": "CC BY-SA 4.0",
+   "artist": "Cherkash",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Marina_Bay_circuit_2023.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Marina_Bay_circuit_2023.svg",
+   "analysis": {
+    "viewBox": null,
+    "width": "948.11035",
+    "height": "620.1084",
+    "paths": 12,
+    "polylines": 0,
+    "path_chars": 6767,
+    "coords": 823,
+    "viewBox_added": "0 0 948.11 620.108",
+    "viewBox_final": "0 0 948.11 620.108"
+   }
+  },
+  "spain": null,
+  "turkiye": null,
+  "uae": null,
+  "uk": null,
+  "usa-austin": null,
+  "usa-vegas": {
+   "file": "usa-vegas.svg",
+   "commons_file": "File:2023 Las Vegas street circuit.svg",
+   "bytes": 83721,
+   "license": "CC BY-SA 4.0",
+   "artist": "Valentin JJ.",
+   "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/43/2023_Las_Vegas_street_circuit.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2023_Las_Vegas_street_circuit.svg",
+   "analysis": {
+    "viewBox": "0 0 319.08289 216.77134",
+    "width": "319.08289mm",
+    "height": "216.77135mm",
+    "paths": 20,
+    "polylines": 0,
+    "path_chars": 8655,
+    "coords": 1026,
+    "viewBox_final": "0 0 319.08289 216.77134"
+   }
+  }
+ }
+}

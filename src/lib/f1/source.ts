@@ -1,6 +1,8 @@
 import type { LiveTimingSnapshot } from "@/types/live-timing";
 import { F1_FEED_ENDPOINT, f1Feed, type FeedState } from "./feed";
 import { buildSnapshot } from "./normalize";
+import { lastKnownSnapshot, rememberSnapshot } from "./snapshot-cache";
+import { fetchLastRaceSnapshot } from "./last-race";
 
 /**
  * Origem dos dados do painel.
@@ -79,16 +81,53 @@ export async function getFeedHealth(): Promise<FeedHealth> {
   return directHealth();
 }
 
-export type LiveResult = { health: FeedHealth; snapshot: LiveTimingSnapshot | null };
+export type LiveResult = { health: FeedHealth; snapshot: LiveTimingSnapshot | null; stale: boolean; staleAt: string | null };
+
+/**
+ * O que mostrar quando o feed da F1 está sem sessão: primeiro a última
+ * classificação que passou por aqui nesta instância; se a instância acabou de
+ * nascer, o resultado oficial da última corrida (Ergast). Assim o site nunca
+ * abre vazio entre fins de semana.
+ */
+async function fallbackSnapshot(): Promise<{ snapshot: LiveTimingSnapshot; storedAt: string } | null> {
+  const saved = lastKnownSnapshot();
+  if (saved) return saved;
+  const lastRace = await fetchLastRaceSnapshot();
+  if (!lastRace) return null;
+  rememberSnapshot(lastRace);
+  return { snapshot: lastRace, storedAt: lastRace.emittedAt };
+}
+
+/** Nunca deixa uma dependência externa estourar o tempo da requisição. */
+function withTimeout<T>(promise: Promise<T>, ms: number, onTimeout: () => T): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const guard = new Promise<T>((resolve) => { timer = setTimeout(() => resolve(onTimeout()), ms); });
+  return Promise.race([promise, guard]).finally(() => { if (timer) clearTimeout(timer); });
+}
 
 export async function getLiveSnapshot(): Promise<LiveResult> {
   if (feedMode === "external") {
-    const { state, health } = await externalState();
-    return { health, snapshot: health.connected ? buildSnapshot(state, health.lastMessageAt ?? new Date().toISOString()) : null };
+    const { state, health } = await externalState().catch((error: unknown) => ({ state: {} as FeedState, health: unavailable(error) }));
+    const snapshot = health.connected ? buildSnapshot(state, health.lastMessageAt ?? new Date().toISOString()) : null;
+    if (snapshot) {
+      rememberSnapshot(snapshot);
+      return { health, snapshot, stale: false, staleAt: null };
+    }
+    const saved = await withTimeout(fallbackSnapshot(), 7000, () => null);
+    return { health, snapshot: saved?.snapshot ?? null, stale: Boolean(saved), staleAt: saved?.storedAt ?? null };
   }
-  await f1Feed.ensure();
+  try {
+    await withTimeout(f1Feed.ensure(), 7000, () => undefined);
+  } catch { /* o erro aparece em directHealth().error; ainda assim tentamos a última cópia */ }
   const health = directHealth();
-  return { health, snapshot: health.connected ? buildSnapshot(f1Feed.getState(), new Date().toISOString()) : null };
+  const snapshot = health.connected ? buildSnapshot(f1Feed.getState(), new Date().toISOString()) : null;
+  if (snapshot) {
+    rememberSnapshot(snapshot);
+    return { health, snapshot, stale: false, staleAt: null };
+  }
+  // Feed sem sessão/fora do ar: devolve a última classificação conhecida em vez de vazio.
+  const saved = await withTimeout(fallbackSnapshot(), 7000, () => null);
+  return { health, snapshot: saved?.snapshot ?? null, stale: Boolean(saved), staleAt: saved?.storedAt ?? null };
 }
 
 /** Só no modo direto: avisa a cada mudança do feed. Retorna a função para cancelar. */

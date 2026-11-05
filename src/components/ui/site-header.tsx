@@ -6,7 +6,9 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const LINKS = [
   { href: "/", label: "Ao vivo" },
+  { href: "/standings", label: "Campeonato" },
   { href: "/calendar", label: "Calendário" },
+  { href: "/drivers", label: "Pilotos" },
 ] as const;
 
 export function SiteHeader() {

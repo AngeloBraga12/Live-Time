@@ -91,6 +91,10 @@ export interface LiveTimingPollResponse {
   connected: boolean;
   lastMessageAt: string | null;
   snapshot?: LiveTimingSnapshot;
+  /** true quando o feed está sem sessão e o que volta é a última classificação guardada. */
+  stale?: boolean;
+  /** Momento em que essa cópia foi registrada. */
+  staleAt?: string | null;
   error?: string;
 }
 

@@ -4,6 +4,24 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ## [Não lançado]
 
+### Calendário e leitura do live timing
+
+- Calendário abre na temporada da etapa atual ou da próxima e rola até o GP em destaque.
+- Tabela de cronometragem adapta as colunas a cartões rotulados em painéis estreitos e usa uma tabela compacta em telas largas, sem barra horizontal.
+- Perfis individuais de pilotos mostram resultados por GP e Sprint de 2026, com os dois tipos de pontuação separados.
+
+### Enciclopédia de pilotos
+
+- Índice atualizado com participantes de 2026, substitutos e pilotos oficialmente confirmados para 2027, com data de corte e critério de confirmação.
+- Perfis de pilotos apresentam históricos estatísticos, status contratual e fontes diretas; campos sem comprovação ficam identificados como indisponíveis.
+
+### Campeonato, perfis e mapas de circuitos
+
+- Adicionadas as páginas de classificação do campeonato e perfis históricos de pilotos e construtores.
+- Adicionadas rotas `/api/standings`, `/api/driver/[id]` e `/api/constructor/[id]`, com dados da API compatível com Ergast e cache para reduzir chamadas.
+- Adicionados mapas SVG locais dos circuitos, metadados e script de atualização com atribuição ao projeto f1db.
+- Atualizado o README e os guias de API, frontend, arquitetura, modelo de dados e fontes para corresponder às páginas, rotas e origens disponíveis.
+
 ### Redesign no estilo do site da F1
 
 - Nova identidade visual: preto carbono, vermelho F1 (`#e10600`) só em destaques, fundo off-white, fonte Archivo com títulos largos em caixa alta e cartões com o canto superior direito arredondado.

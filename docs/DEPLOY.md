@@ -158,6 +158,7 @@ Nenhuma é obrigatória. Modelo em [`.env.example`](../.env.example).
 | `F1_STREAM_SECONDS` | 290 (Vercel), 25 (Netlify), 1800 (outros) | Duração de cada stream SSE antes do `reconnect`. Mantenha abaixo do limite da plataforma. |
 | `F1_LIVETIMING_API_URL` | vazio | URL de uma f1-livetiming-api externa. Se definida, o site deixa de conectar direto na F1 e passa a consultar essa API (modo `external`). |
 | `F1_SIGNALR_URL` | `https://livetiming.formula1.com/signalrcore` | Endereço do hub SignalR. Útil para testes e servidores falsos. |
+| `ERGAST_BASE_URL` | `https://api.jolpi.ca/ergast/f1` | Base da API compatível com Ergast para classificação e históricos; opcionalmente substitui o espelho padrão. |
 | `VERCEL`, `NETLIFY` | definidas pelas plataformas | Usadas só para escolher a janela padrão do stream. |
 | `PORT` | 3000 | Porta do `next start` (Docker, Fly, Render). |
 
