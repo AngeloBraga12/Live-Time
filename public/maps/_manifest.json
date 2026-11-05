@@ -306,7 +306,7 @@
     "viewBox_final": "0 0 713.8 348.1"
    }
   },
-  "netherlands": null,
+  "netherlands": {"file":"netherlands.svg","commons_file":"File:2022 F1 CourseLayout Netherlands.svg","bytes":56398,"license":"CC BY-SA 4.0","artist":"ごひょううべこ","source_url":"https://upload.wikimedia.org/wikipedia/commons/9/9f/2022_F1_CourseLayout_Netherlands.svg","page_url":"https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Netherlands.svg","analysis":{}},
   "portugal": {
    "file": "portugal.svg",
    "commons_file": "File:Autódromo do Algarve F1 Sectors.svg",
@@ -386,11 +386,11 @@
     "viewBox_final": "0 0 948.11 620.108"
    }
   },
-  "spain": null,
-  "turkiye": null,
-  "uae": null,
-  "uk": null,
-  "usa-austin": null,
+  "spain": {"file":"spain.svg","commons_file":"File:2022 F1 CourseLayout Spain.svg","bytes":55196,"license":"CC BY-SA 4.0","artist":"ごひょううべこ","source_url":"https://upload.wikimedia.org/wikipedia/commons/3/3a/2022_F1_CourseLayout_Spain.svg","page_url":"https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Spain.svg","analysis":{}},
+  "turkiye": {"file":"turkiye.svg","commons_file":"File:Istanbul park.svg","bytes":53663,"license":"CC BY-SA 3.0","artist":"Will Pittenger","source_url":"https://upload.wikimedia.org/wikipedia/commons/5/5d/Istanbul_park.svg","page_url":"https://commons.wikimedia.org/wiki/File:Istanbul_park.svg","analysis":{}},
+  "uae": {"file":"uae.svg","commons_file":"File:2022 F1 CourseLayout Abu Dhabi.svg","bytes":46234,"license":"CC BY-SA 4.0","artist":"ごひょううべこ","source_url":"https://upload.wikimedia.org/wikipedia/commons/2/24/2022_F1_CourseLayout_Abu_Dhabi.svg","page_url":"https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_Abu_Dhabi.svg","analysis":{}},
+  "uk": {"file":"uk.svg","commons_file":"File:Circuit Silverstone.svg","bytes":112911,"license":"CC BY-SA 3.0","artist":"Will Pittenger","source_url":"https://upload.wikimedia.org/wikipedia/commons/0/0e/Circuit_Silverstone.svg","page_url":"https://commons.wikimedia.org/wiki/File:Circuit_Silverstone.svg","analysis":{}},
+  "usa-austin": {"file":"usa-austin.svg","commons_file":"File:2022 F1 CourseLayout COTA.svg","bytes":46697,"license":"CC BY-SA 4.0","artist":"ごひょううべこ","source_url":"https://upload.wikimedia.org/wikipedia/commons/b/b4/2022_F1_CourseLayout_COTA.svg","page_url":"https://commons.wikimedia.org/wiki/File:2022_F1_CourseLayout_COTA.svg","analysis":{}},
   "usa-vegas": {
    "file": "usa-vegas.svg",
    "commons_file": "File:2023 Las Vegas street circuit.svg",
