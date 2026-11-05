@@ -6,6 +6,9 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ### Calendário e leitura do live timing
 
+- Mapas SVG corrigidos e completados para todos os circuitos listados no calendário, com créditos e licenças registrados.
+- Miniaturas de circuitos usam uma base escura consistente, mantendo o traçado visível nos temas claro e escuro.
+
 - Calendário abre na temporada da etapa atual ou da próxima e rola até o GP em destaque.
 - Tabela de cronometragem adapta as colunas a cartões rotulados em painéis estreitos e usa uma tabela compacta em telas largas, sem barra horizontal.
 - Perfis individuais de pilotos mostram resultados por GP e Sprint de 2026, com os dois tipos de pontuação separados.
