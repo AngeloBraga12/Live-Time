@@ -188,7 +188,8 @@ Lista das mensagens (até 50, a mais recente primeiro) com categoria em portugu�
 - título "Calendário 2026" e seletor de temporada (2026, 2027); abre na temporada do ano atual;
 - grade de cartões (`auto-fill`, mínimo 260 px) com etapa, datas (`23 – 25 out`), país em português e caixa alta, nome oficial do GP e circuito · cidade;
 - a primeira etapa que ainda não terminou fica em **vermelho**, com o selo **Próxima · N dias** ou **Neste fim de semana**;
-- etapas passadas mostram **Encerrada**.
+- etapas passadas mostram **Encerrada**;
+- mapas locais usam miniatura com moldura, dimensões e tratamento monocromático uniformes.
 
 ## Tema claro e escuro
 
