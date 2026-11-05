@@ -22,7 +22,9 @@ function RaceCard({ event, state, today, featured = false }: { event: GrandPrixE
     <h3 className="race-country">{countryName(event.country)}</h3>
     <p className="race-name">{event.name}</p>
     <p className="race-circuit">{event.circuit} · {event.location}</p>
-    {meta && <img className="circuit-thumb" src={meta.mapPath} alt={meta.name} loading="lazy" />}
+    {meta && <div className="circuit-thumb">
+      <img className="circuit-thumb-image" src={meta.mapPath} alt={`Traçado do ${meta.name}`} loading="lazy" />
+    </div>}
   </li>;
 }
 

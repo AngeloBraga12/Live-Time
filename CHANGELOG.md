@@ -8,6 +8,10 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 - Indicador da aba ativa desliza entre os links do cabeçalho e respeita a preferência por movimento reduzido.
 
+### Calendário
+
+- Miniaturas dos mapas usam o mesmo quadro, escala e tratamento monocromático para manter um padrão visual entre os GPs.
+
 ### Calendário e leitura do live timing
 
 - Mapas SVG corrigidos e completados para todos os circuitos listados no calendário, com créditos e licenças registrados.
