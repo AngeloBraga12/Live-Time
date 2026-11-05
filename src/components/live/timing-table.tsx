@@ -18,7 +18,7 @@ function Tyre({ tire }: { tire: DriverTiming["tire"] }) {
 }
 
 export function TimingTable({ drivers, gapMode, isRace }: { drivers: DriverTiming[]; gapMode: GapMode; isRace: boolean }) {
-  return <div className="table-wrap">
+  return <div className="table-wrap timing-wrap">
     <table className="timing timing--live">
       <thead>
         <tr>
@@ -47,12 +47,12 @@ export function TimingTable({ drivers, gapMode, isRace }: { drivers: DriverTimin
                 {inPit && <span className="pit-tag">{driver.pitStatus === "in-pit" ? "Box" : "Pit lane"}</span>}
               </span>
             </th>
-            <td className="c-gap"><Gap value={isRace && gapMode === "interval" && driver.gapToLeader !== "LEADER" && !SPECIAL_GAPS[driver.gapToLeader] ? driver.interval : driver.gapToLeader} /></td>
+            <td className="c-gap" data-label={isRace ? (gapMode === "interval" ? "Intervalo" : "Líder") : "Diferença"}><Gap value={isRace && gapMode === "interval" && driver.gapToLeader !== "LEADER" && !SPECIAL_GAPS[driver.gapToLeader] ? driver.interval : driver.gapToLeader} /></td>
             <td className="c-lap c-lap-first" data-label="Últ">{lapTime(driver.lastLapSeconds)}</td>
             <td className="c-lap c-lap-best" data-label="Mel">{lapTime(driver.bestLapSeconds)}</td>
             {driver.sectors.map((sector) => <td key={sector.sector} className="c-sector" data-label={`S${sector.sector}`}><span className={`sector sector-${sector.status}`}>{sectorTime(sector.timeSeconds)}</span></td>)}
-            <td className="c-tyre"><Tyre tire={driver.tire} /></td>
-            <td className="c-num" data-label="Vol">{driver.completedLaps}</td>
+            <td className="c-tyre" data-label="Pneu"><Tyre tire={driver.tire} /></td>
+            <td className="c-num" data-label="Voltas">{driver.completedLaps}</td>
           </tr>;
         })}
       </tbody>
