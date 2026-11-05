@@ -320,10 +320,52 @@ html[data-theme="dark"] .race-flag { color: #c00500; }
 .race-country { font-size: 1.5rem; font-weight: 800; line-height: 1.1; margin-top: 2px; }
 .race-name { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-top: auto; padding-top: 10px; }
 .race-circuit { font-size: 13px; color: var(--ink-3); }
+.race-details-link { display: inline-flex; align-items: center; gap: 6px; width: fit-content; margin-top: 8px; color: var(--red-ink); font-size: 13px; font-weight: 800; text-decoration: none; }
+.race-details-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 .race-past .race-country, .race-past .race-dates { color: var(--ink-2); }
 .race-next, .race-live { background: var(--red); border-color: var(--red); color: #fff; }
 .race-next .race-round, .race-live .race-round, .race-next .race-name, .race-live .race-name,
 .race-next .race-circuit, .race-live .race-circuit { color: #fff; }
+.race-next .race-details-link, .race-live .race-details-link { color: #fff; }
+
+/* ---------- Detalhes de cada Grande Prêmio ---------- */
+.gp-detail-page { max-width: 1080px; padding-block: clamp(28px, 5vw, 52px) 72px; display: grid; gap: 20px; }
+.gp-back-link { width: fit-content; color: var(--ink-2); font-size: 14px; font-weight: 700; text-decoration: none; }
+.gp-back-link:hover { color: var(--red-ink); }
+.gp-detail-header { display: grid; gap: 7px; }
+.gp-detail-header .page-title { margin-top: 0; }
+.gp-detail-subtitle, .gp-detail-dates { color: var(--ink-2); }
+.gp-detail-dates { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.gp-panel, .gp-countdown-panel {
+  padding: clamp(18px, 3vw, 28px); background: var(--surface); border-top: 1px solid var(--line-strong);
+  border-right: 1px solid var(--line-strong); border-radius: var(--radius-corner);
+}
+.gp-countdown-panel { background: var(--carbon); color: #fff; border-color: rgb(255 255 255 / .12); }
+.gp-countdown-caption { color: rgb(255 255 255 / .72); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gp-countdown-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 12px; max-width: 560px; }
+.gp-countdown-unit { display: grid; gap: 3px; }
+.gp-countdown-unit strong { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.gp-countdown-unit span { color: rgb(255 255 255 / .7); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gp-countdown-today, .gp-countdown-ended { font-size: 1.4rem; font-weight: 900; }
+.gp-countdown-today span { display: block; margin-top: 5px; color: rgb(255 255 255 / .72); font-size: 14px; font-weight: 500; }
+.gp-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.gp-section-heading .section-title, .gp-panel .section-title { font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 900; }
+.gp-sprint-badge { padding: 5px 9px; background: var(--red); color: #fff; font-size: 11px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.gp-session-list { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.gp-session-row { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(0, 1.2fr); gap: 4px 16px; align-items: center; padding: 13px 16px; background: var(--surface); }
+.gp-session-row strong { font-size: 14px; }
+.gp-session-row > span { color: var(--ink-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+.gp-session-row small { grid-column: 2; color: var(--ink-3); font-size: 12px; }
+.gp-timezone-note { margin-top: 12px; color: var(--ink-3); font-size: 12px; }
+.gp-data-gap { margin-top: 12px; color: var(--ink-2); font-size: 14px; }
+.gp-podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.gp-podium-place { display: grid; gap: 4px; padding: 14px; background: var(--surface-2); }
+.gp-podium-position { color: var(--red-ink); font-size: 12px; font-weight: 900; }
+.gp-podium-place strong { font-size: 15px; }
+.gp-podium-place > span:last-child { color: var(--ink-2); font-size: 13px; }
+.gp-sources { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--ink-3); font-size: 12px; }
+.gp-sources a { color: var(--ink-2); font-weight: 700; text-underline-offset: 3px; }
+.gp-countdown-loading { height: 82px; }
 
 /* ---------- Rodapé ---------- */
 .site-footer { border-top: 1px solid var(--line); background: var(--paper); }
@@ -495,4 +537,12 @@ html[data-theme="dark"] .skeleton::after, .hero .skeleton::after { background: l
   .timing--live .tyre { gap: 3px; }
   .timing--live .tyre-ring { width: 20px; height: 20px; border-width: 2px; font-size: 10px; }
   .timing--live .tyre-age { font-size: 12px; }
+}
+
+@media (max-width: 640px) {
+  .gp-session-row { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+  .gp-session-row small { grid-column: 1; }
+  .gp-podium { grid-template-columns: minmax(0, 1fr); }
+  .gp-countdown-grid { gap: 8px; }
+  .gp-section-heading { align-items: flex-start; flex-direction: column; }
 }

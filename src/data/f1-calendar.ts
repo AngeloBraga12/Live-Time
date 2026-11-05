@@ -16,6 +16,12 @@ export const F1_CALENDAR_SOURCES: Record<number, string> = {
   2027: "https://www.formula1.com/en/racing/2027",
 };
 
+// Fins de semana Sprint anunciados oficialmente pela Fórmula 1.
+export const F1_SPRINT_ROUNDS: Record<number, readonly number[]> = {
+  2026: [2, 4, 5, 9, 12, 17],
+  2027: [1, 3, 4, 7, 8, 10, 14, 21, 23, 24],
+};
+
 // Dates match the official season calendars. Exact session start times are not
 // inferred; a date-only countdown is used until F1 publishes them.
 export const F1_CALENDAR: Record<number, GrandPrixEvent[]> = {

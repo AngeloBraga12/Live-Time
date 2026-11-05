@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { F1_SEASONS, type GrandPrixEvent } from "@/data/f1-calendar";
 import { useCalendar } from "@/hooks/use-calendar";
 import { countryName, daysUntil, weekendRange } from "@/lib/format";
@@ -22,6 +23,7 @@ function RaceCard({ event, state, today, featured = false }: { event: GrandPrixE
     <h3 className="race-country">{countryName(event.country)}</h3>
     <p className="race-name">{event.name}</p>
     <p className="race-circuit">{event.circuit} · {event.location}</p>
+    <Link className="race-details-link" href={`/calendar/${event.season}/${event.round}`}>Programação e resultados <span aria-hidden="true">→</span></Link>
     {meta && <div className="circuit-thumb">
       <img className="circuit-thumb-image" src={meta.mapPath} alt={`Traçado do ${meta.name}`} loading="lazy" />
     </div>}
