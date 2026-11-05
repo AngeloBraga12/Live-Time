@@ -10,6 +10,8 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ### Calendário
 
+- Miniaturas dos mapas mostram o traçado inteiro em um quadro mais alto e preservam a proporção original dos SVGs.
+- Classificações eliminam a repetição do código abreviado junto ao nome e mantêm posição, nome e pontos visíveis em telas estreitas, sem rolagem horizontal.
 - Miniaturas dos mapas usam o mesmo quadro, escala e tratamento monocromático para manter um padrão visual entre os GPs.
 - Cada etapa abre uma subpágina com programação de sessões, contagem regressiva e pódios de corrida e Sprint.
 - Horários e resultados de 2026 são consultados na API Jolpica/Ergast; horários de 2027 ficam como pendentes até divulgação oficial.
