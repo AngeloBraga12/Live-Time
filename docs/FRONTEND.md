@@ -71,6 +71,8 @@ app/layout.tsx                    fonte, script de tema, link "Pular para o cont
 
 Funções de formatação (tempos de volta, nomes de sessão em português, estado da pista, datas, nomes de países) ficam em [`src/lib/format.ts`](../src/lib/format.ts).
 
+O indicador vermelho da aba ativa desliza entre os links do cabeçalho quando a rota muda. A transição é desativada quando o sistema solicita movimento reduzido.
+
 ## Conexão em tempo real
 
 Só a página ao vivo conecta ao live timing: `LiveTiming` chama `useLiveTiming()`. O calendário não abre conexão nenhuma, o que economiza a cota gratuita da hospedagem.

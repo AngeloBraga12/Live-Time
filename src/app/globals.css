@@ -95,14 +95,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .wordmark { display: inline-flex; align-items: baseline; gap: 6px; text-decoration: none; font-size: 19px; line-height: 1; }
 .wordmark-strong { font-weight: 900; }
 .wordmark-light { font-weight: 400; color: rgb(255 255 255 / 0.78); }
-.site-nav { display: flex; gap: 4px; height: 100%; }
+.site-nav { position: relative; display: flex; gap: 4px; height: 100%; }
 .site-nav a {
   display: flex; align-items: center; height: 100%; padding-inline: 12px;
   font-size: 15px; font-weight: 600; text-decoration: none; color: rgb(255 255 255 / 0.78);
   border-bottom: 3px solid transparent; padding-top: 3px;
 }
 .site-nav a:hover { color: #fff; }
-.site-nav a[aria-current="page"] { color: #fff; border-bottom-color: var(--red); }
+.site-nav a[aria-current="page"] { color: #fff; }
+.site-nav-indicator {
+  position: absolute; bottom: 0; left: 0; height: 3px; background: var(--red); pointer-events: none;
+  will-change: transform, width; transition: transform 280ms cubic-bezier(.2, .8, .2, 1), width 280ms cubic-bezier(.2, .8, .2, 1);
+}
 .theme-toggle {
   margin-left: auto; width: 44px; height: 44px; display: grid; place-items: center;
   background: transparent; border: 1px solid rgb(255 255 255 / 0.22); border-radius: 50%; color: #fff;
@@ -344,6 +348,7 @@ html[data-theme="dark"] .skeleton::after, .hero .skeleton::after { background: l
 
 @media (prefers-reduced-motion: reduce) {
   .skeleton::after, .live-badge::before { animation: none; }
+  .site-nav-indicator { transition: none; }
 }
 
 /* ---------- Responsivo ---------- */
