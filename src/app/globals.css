@@ -307,10 +307,10 @@ html[data-theme="dark"] .tyre-hard { border-color: #f0f0f0; }
 .race-featured { box-shadow: 0 0 0 3px var(--red), 0 12px 32px rgb(225 6 0 / .16); }
 .race-featured .race-flag { border-radius: 2px; }
 .circuit-thumb {
-  margin-top: auto; width: 100%; height: 80px; box-sizing: border-box; padding: 6px 8px;
+  margin-top: auto; width: 100%; height: 128px; box-sizing: border-box; padding: 8px 10px;
   display: grid; place-items: center; overflow: hidden; background: #101015; border: 1px solid #34343c; border-radius: 8px;
 }
-.circuit-thumb-image { display: block; width: 100%; height: 100%; object-fit: contain; filter: grayscale(1) invert(1) contrast(1.25); }
+.circuit-thumb-image { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; filter: grayscale(1) invert(1) contrast(1.25); }
 .race-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; min-height: 24px; }
 .race-round { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .race-flag { padding: 3px 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: #fff; color: var(--red-ink); }
@@ -414,15 +414,25 @@ html[data-theme="dark"] .skeleton::after, .hero .skeleton::after { background: l
   .hide-sm { display: none; }
   .site-header-inner { gap: 8px; }
   .site-nav { gap: 0; }
-  .site-nav a { padding-inline: 6px; font-size: 13px; }
+  .site-nav a { padding-inline: 4px; font-size: 12px; }
   .wordmark { font-size: 16px; }
   .wordmark-light { display: none; }
   .timing td, .timing tbody th { padding-inline: 8px; }
   .board-header .segmented { width: 100%; }
   .board-header .segmented button { flex: 1; }
   .c-sector { padding-inline: 4px !important; font-size: 13px; }
+  .standings .table-wrap { overflow-x: hidden; }
+  .standings-table { width: 100%; table-layout: fixed; font-size: 13px; }
+  .standings-table thead th { padding: 10px 6px; font-size: 10px; }
+  .standings-table td { height: auto; min-height: 46px; padding: 8px 6px; white-space: normal; }
+  .standings-table .c-pos { width: 44px; font-size: 14px; }
+  .standings-table .c-points { width: 66px; white-space: nowrap; }
+  .standings-table .driver { gap: 0; }
+  .standings-table .driver-name { display: block; font-size: 13px; line-height: 1.2; }
 }
 .c-points { text-align: right; font-weight: 700; }
+.standings-table .driver { min-width: 0; }
+.standings-table .driver-name { min-width: 0; overflow-wrap: anywhere; }
 .delta { font-size: 11px; font-weight: 800; margin-left: 6px; }
 .delta.up { color: var(--green); }
 .delta.down { color: var(--red-ink); }

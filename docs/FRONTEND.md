@@ -50,9 +50,9 @@ As páginas de calendário e campeonato carregam seus dados no navegador; rotas 
 
 ## Campeonato e perfis
 
-`/standings` usa `useChampionship` e a store `championship-store` para buscar `/api/standings?season=AAAA`. A tela apresenta tabelas de pilotos e construtores, estados de carregamento/erro e comparação com a classificação anterior armazenada no cliente.
+`/standings` usa `useChampionship` e a store `championship-store` para buscar `/api/standings?season=AAAA`. A tela apresenta tabelas de pilotos e construtores, estados de carregamento/erro e comparação com a classificação anterior armazenada no cliente. As tabelas mostram o nome completo uma única vez; em telas estreitas, escondem colunas secundárias e mantêm posição, nome e pontos visíveis sem rolagem horizontal.
 
-Links para `/driver/{driverId}` e `/team/{constructorId}` abrem perfis históricos fornecidos pelas rotas `/api/driver/{id}` e `/api/constructor/{id}`. Os componentes exibem totais agregados da carreira, temporadas e marcos; equipes também listam pilotos associados. As respostas são cacheadas no cliente para reduzir chamadas repetidas. Os cabeçalhos de etapa mostram o traçado SVG do circuito quando há metadados e arquivo local. As fontes e atribuições estão em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
+Links para `/driver/{driverId}` e `/team/{constructorId}` abrem perfis históricos fornecidos pelas rotas `/api/driver/{id}` e `/api/constructor/{id}`. Os componentes exibem totais agregados da carreira, temporadas e marcos; equipes também listam pilotos associados. As respostas são cacheadas no cliente para reduzir chamadas repetidas. Os cabeçalhos de etapa mostram o traçado SVG do circuito quando há metadados e arquivo local. No calendário, as miniaturas mantêm a proporção original dos SVGs em um quadro vertical maior para evitar cortar o traçado. As fontes e atribuições estão em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
 
 ## Estrutura de componentes
 

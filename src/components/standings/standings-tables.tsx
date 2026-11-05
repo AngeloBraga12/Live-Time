@@ -9,7 +9,6 @@ function DriverRow({ d, previous }: { d: DriverStanding; previous?: DriverStandi
       <td className="c-pos">{d.position}{delta !== null && delta !== 0 && <span className={`delta ${delta > 0 ? "up" : "down"}`}>{delta > 0 ? `+${delta}` : delta}</span>}</td>
       <td>
         <Link href={`/driver/${d.driverId}`} className="driver">
-          <span className="driver-tla">{d.driverId.toUpperCase()}</span>
           <span className="driver-name">{d.driverName}</span>
         </Link>
       </td>
@@ -31,7 +30,6 @@ function ConstructorRow({ c, previous }: { c: ConstructorStanding; previous?: Co
       <td className="c-pos">{c.position}{delta !== null && delta !== 0 && <span className={`delta ${delta > 0 ? "up" : "down"}`}>{delta > 0 ? `+${delta}` : delta}</span>}</td>
       <td>
         <Link href={`/team/${c.constructorId}`} className="driver">
-          <span className="driver-tla">{c.constructorId.toUpperCase()}</span>
           <span className="driver-name">{c.constructorName}</span>
         </Link>
       </td>
@@ -49,7 +47,7 @@ export function StandingsTables({ drivers, constructors, previous }: { drivers: 
           <h2 id="drivers-title" className="board-title">Campeonato de Pilotos</h2>
         </header>
         <div className="table-wrap">
-          <table className="timing">
+          <table className="timing standings-table">
             <thead>
               <tr>
                 <th className="c-pos">Pos</th>
