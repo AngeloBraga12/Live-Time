@@ -49,9 +49,11 @@ export async function GET(request: Request) {
       let lastKey = "";
       const push = async () => {
         try {
-          const { health, snapshot } = await getLiveSnapshot();
-          const body: LiveTimingPollResponse = { connected: health.connected && Boolean(snapshot), lastMessageAt: health.lastMessageAt, ...(snapshot ? { snapshot } : {}) };
-          const key = feedMode === "direct" ? `${f1Feed.getVersion()}:${body.connected}` : JSON.stringify({ ...body, snapshot: snapshot ? { ...snapshot, emittedAt: "" } : null });
+          const { health, snapshot, stale, staleAt } = await getLiveSnapshot();
+          const body: LiveTimingPollResponse = { connected: health.connected, lastMessageAt: health.lastMessageAt, stale, ...(staleAt ? { staleAt } : {}), ...(snapshot ? { snapshot } : {}) };
+          const key = feedMode === "direct"
+            ? `${f1Feed.getVersion()}:${body.connected}:${stale ? (staleAt ?? "stale") : "live"}:${snapshot ? snapshot.drivers.length : 0}`
+            : JSON.stringify({ ...body, snapshot: snapshot ? { ...snapshot, emittedAt: "" } : null });
           if (key === lastKey) return;
           lastKey = key;
           send("snapshot", body);
@@ -71,7 +73,7 @@ export async function GET(request: Request) {
       };
       cleanups.push(() => { if (pending) clearTimeout(pending); });
 
-      await push();
+      void push();
       lastSentAt = Date.now();
 
       cleanups.push(onFeedChange(schedule));

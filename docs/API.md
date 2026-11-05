@@ -9,8 +9,39 @@ Todas as rotas ficam em `src/app/api/` e rodam no runtime Node.js (`export const
 | GET | [`/api/f1-live/status`](#get-apif1-livestatus) | Estado da conexão com a F1 | CDN 2 s | 15 s |
 | GET | [`/api/health`](#get-apihealth) | Health check de plataforma | nenhum | 15 s |
 | GET | [`/api/calendar`](#get-apicalendar) | Calendário 2026–2027 | 5 min | padrão |
+| GET | [`/api/standings?season=2026`](#get-apistandingsseason) | Classificação de pilotos e construtores | 5 min | padrão |
+| GET | [`/api/driver/{id}`](#get-apidriverid) | Perfil e histórico do piloto | 1 h; revalida até 24 h | padrão |
+| GET | [`/api/constructor/{id}`](#get-apiconstructorid) | Perfil e histórico do construtor | 1 h; revalida até 24 h | padrão |
 
 Base URL de produção: `https://live-time-silk.vercel.app`. Localmente: `http://localhost:3000`.
+
+## GET /api/standings?season=2026
+
+Devolve a classificação de pilotos e construtores para a temporada informada. Sem `season`, usa 2026. O resultado tem `season`, `drivers`, `constructors`, `lastUpdated` e `source`; cada linha inclui posição, pontos e vitórias, além do identificador usado para abrir o perfil correspondente. Os dados são convertidos para tipos do domínio em `src/lib/f1/standings.ts`.
+
+```bash
+curl 'http://localhost:3000/api/standings?season=2026'
+```
+
+Em falha de origem a rota devolve `502` com `{ "error": "..." }` e `Cache-Control: no-store`.
+
+## GET /api/driver/{id}
+
+Devolve `{ profile, totals, seasons }` para o `driverId` compatível com Ergast, por exemplo `max_verstappen`. O resumo agrega corridas, vitórias, pódios, poles, voltas mais rápidas, pontos e títulos; `seasons` detalha os resultados anuais. IDs fora do padrão `[a-z0-9_]+` retornam `400`; identificador inexistente retorna `404`; falha na fonte retorna `502`. Cache: uma hora, com revalidação stale por até 24 horas. Implementação: [`src/app/api/driver/[id]/route.ts`](../src/app/api/driver/%5Bid%5D/route.ts).
+
+```bash
+curl http://localhost:3000/api/driver/max_verstappen
+```
+
+## GET /api/constructor/{id}
+
+Devolve `{ profile, totals, seasons, drivers? }` para o `constructorId`, por exemplo `red_bull`. Os totais e temporadas incluem corridas, vitórias, pódios, poles, voltas mais rápidas, pontos e títulos; `drivers` lista os pilotos associados quando disponível. IDs fora do padrão `[a-z0-9_]+` retornam `400`; identificador inexistente retorna `404`; falha na fonte retorna `502`. Cache: uma hora, com revalidação stale por até 24 horas. Implementação: [`src/app/api/constructor/[id]/route.ts`](../src/app/api/constructor/%5Bid%5D/route.ts).
+
+```bash
+curl http://localhost:3000/api/constructor/red_bull
+```
+
+As rotas de campeonato e históricos consomem a API compatível com Ergast; disponibilidade, espelhos e cache do navegador estão descritos em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
 
 ---
 

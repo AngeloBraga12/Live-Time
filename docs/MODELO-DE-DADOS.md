@@ -233,6 +233,16 @@ A cor exibida vem de `TeamColour` do feed, com classes CSS `team-<id>` como alte
 
 Por `Position`; se ausente, por `Line`; se ambos faltarem, vão para o fim (999). Empates são resolvidos pelo número do carro.
 
+## Campeonato e perfis históricos
+
+Os dados usados nas páginas `/standings`, `/driver/[id]` e `/team/[id]` são tipados em [`src/types/championship.ts`](../src/types/championship.ts) e [`src/types/profile.ts`](../src/types/profile.ts), separados do snapshot de live timing.
+
+`ChampionshipData` contém `season`, listas de `DriverStanding` e `ConstructorStanding`, `lastUpdated` e `source`. Cada classificação inclui posição, identificador estável, pontos e vitórias; pilotos também incluem número permanente e equipe atual.
+
+`DriverHistory` contém `profile`, `totals` e `seasons`. Os totais agregam temporadas, corridas, vitórias, pódios, poles, voltas mais rápidas, pontos e títulos, além de marcos disponíveis. `ConstructorHistory` segue o mesmo formato e pode incluir `drivers` com o resumo de cada piloto da equipe.
+
+Os identificadores de piloto e equipe são os `driverId` e `constructorId` da API compatível com Ergast. Esses formatos vêm da fonte histórica, não do feed SignalR ao vivo; veja [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
+
 ## Funções exportadas
 
 | Função | Arquivo | Descrição |

@@ -6,6 +6,7 @@ Interface em Next.js 16 (App Router) com React 19, Zustand 5 e ícones lucide-re
 
 - [Direção visual](#direção-visual)
 - [Páginas](#páginas)
+- [Campeonato e perfis](#campeonato-e-perfis)
 - [Estrutura de componentes](#estrutura-de-componentes)
 - [Conexão em tempo real](#conexão-em-tempo-real)
 - [Store](#store)
@@ -41,8 +42,17 @@ Sem gradientes decorativos, sem ícones em círculos coloridos, sem textos expli
 | --- | --- | --- |
 | `/` | [`src/app/page.tsx`](../src/app/page.tsx) | Ao vivo: cabeçalho da sessão ou da próxima etapa, classificação e direção de prova |
 | `/calendar` | [`src/app/calendar/page.tsx`](../src/app/calendar/page.tsx) | Calendário 2026 e 2027 em cartões |
+| `/standings` | [`src/app/standings/page.tsx`](../src/app/standings/page.tsx) | Classificação de pilotos e construtores; seletor de temporada |
+| `/driver/[id]` | [`src/app/driver/[id]/page.tsx`](../src/app/driver/[id]/page.tsx) | Perfil, totais da carreira e resumo por temporada do piloto |
+| `/team/[id]` | [`src/app/team/[id]/page.tsx`](../src/app/team/[id]/page.tsx) | Perfil, totais da equipe, temporadas e pilotos associados |
 
-As duas páginas são pré-renderizadas no build (estáticas) e completadas no navegador.
+As páginas de calendário e campeonato carregam seus dados no navegador; rotas de perfil são resolvidas por identificador.
+
+## Campeonato e perfis
+
+`/standings` usa `useChampionship` e a store `championship-store` para buscar `/api/standings?season=AAAA`. A tela apresenta tabelas de pilotos e construtores, estados de carregamento/erro e comparação com a classificação anterior armazenada no cliente.
+
+Links para `/driver/{driverId}` e `/team/{constructorId}` abrem perfis históricos fornecidos pelas rotas `/api/driver/{id}` e `/api/constructor/{id}`. Os componentes exibem totais agregados da carreira, temporadas e marcos; equipes também listam pilotos associados. As respostas são cacheadas no cliente para reduzir chamadas repetidas. Os cabeçalhos de etapa mostram o traçado SVG do circuito quando há metadados e arquivo local. As fontes e atribuições estão em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
 
 ## Estrutura de componentes
 

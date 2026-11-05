@@ -71,6 +71,10 @@ Não existe nenhum processo separado. O mesmo servidor Next.js que entrega as p�
 | Rotas | [`src/app/api/**/route.ts`](../src/app/api) | HTTP: stream SSE, snapshot, status, health, calendário. |
 | Cliente | [`src/hooks/use-live-timing.ts`](../src/hooks/use-live-timing.ts) | EventSource com fallback para polling, pausa em segundo plano. |
 | Estado da UI | [`src/store/live-timing-store.ts`](../src/store/live-timing-store.ts) | Store Zustand compartilhada por todas as páginas. |
+| Dados de campeonato | [`src/lib/f1/ergast.ts`](../src/lib/f1/ergast.ts), [`standings.ts`](../src/lib/f1/standings.ts), [`history.ts`](../src/lib/f1/history.ts) | Consulta o espelho compatível com Ergast e converte tabelas de classificação e históricos para tipos próprios. |
+| Mapas | [`src/data/circuits-meta.ts`](../src/data/circuits-meta.ts), `public/maps/` | Metadados e SVGs locais dos circuitos, atribuídos ao projeto f1db. |
+
+As páginas `/standings`, `/driver/[id]` e `/team/[id]` usam rotas HTTP próprias e uma fonte histórica separada do feed SignalR. Assim, elas não abrem outra conexão de live timing. A classificação usa cache de servidor de 5 minutos e os perfis usam cache do cliente para evitar chamadas repetidas; detalhes e origem em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
 
 As camadas de merge e normalização não têm efeitos colaterais nem dependem de rede, o que permite testá-las com um estado real salvo em arquivo (`tests/fixtures/singapore-2026-race.json`).
 

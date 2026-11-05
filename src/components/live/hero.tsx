@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { GrandPrixEvent } from "@/data/f1-calendar";
 import type { SessionInfo } from "@/types/live-timing";
 import { daysUntil, sessionLabel, weekendRange, type TrackState } from "@/lib/format";
+import { CircuitMap } from "@/components/ui/circuit-map";
 
 function Stat({ label, value, unit }: { label: string; value: string | number; unit?: string }) {
   return <div className="hero-stat">
@@ -23,6 +24,7 @@ export function SessionHero({ session, event, running, track }: { session: Sessi
         </p>
         <h1 id="hero-title" className="hero-title">{session.meetingName}</h1>
         <p className="hero-sub">{sessionLabel(session.sessionName)}</p>
+        {event && <CircuitMap event={event} />}
       </div>
       <dl className="hero-stats">
         {session.totalLaps > 0 && <Stat label="Volta" value={`${session.currentLap}/${session.totalLaps}`} />}
@@ -50,6 +52,7 @@ export function EventHero({ event, today }: { event?: GrandPrixEvent; today: str
         <h1 id="hero-title" className="hero-title">{event.name}</h1>
         <p className="hero-sub">{event.circuit} · {event.location}</p>
         <p className="hero-dates">{weekendRange(event)}</p>
+        <CircuitMap event={event} />
       </div>
       <div className="countdown" aria-label={inProgress ? "Fim de semana em andamento" : `Faltam ${days} dias`}>
         {inProgress

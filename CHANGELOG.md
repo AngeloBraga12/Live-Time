@@ -4,6 +4,13 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ## [Não lançado]
 
+### Campeonato, perfis e mapas de circuitos
+
+- Adicionadas as páginas de classificação do campeonato e perfis históricos de pilotos e construtores.
+- Adicionadas rotas `/api/standings`, `/api/driver/[id]` e `/api/constructor/[id]`, com dados da API compatível com Ergast e cache para reduzir chamadas.
+- Adicionados mapas SVG locais dos circuitos, metadados e script de atualização com atribuição ao projeto f1db.
+- Atualizado o README e os guias de API, frontend, arquitetura, modelo de dados e fontes para corresponder às páginas, rotas e origens disponíveis.
+
 ### Redesign no estilo do site da F1
 
 - Nova identidade visual: preto carbono, vermelho F1 (`#e10600`) só em destaques, fundo off-white, fonte Archivo com títulos largos em caixa alta e cartões com o canto superior direito arredondado.

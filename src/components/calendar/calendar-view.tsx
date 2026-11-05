@@ -4,11 +4,13 @@ import { useState } from "react";
 import { F1_SEASONS, type GrandPrixEvent } from "@/data/f1-calendar";
 import { useCalendar } from "@/hooks/use-calendar";
 import { countryName, daysUntil, weekendRange } from "@/lib/format";
+import { CIRCUITS_META } from "@/data/circuits-meta";
 
 type RaceState = "past" | "live" | "next" | "upcoming";
 
 function RaceCard({ event, state, today }: { event: GrandPrixEvent; state: RaceState; today: string | null }) {
   const days = today ? daysUntil(event.startDate, today) : null;
+  const meta = CIRCUITS_META[event.circuit];
   return <li className={`race-card race-${state}`}>
     <div className="race-card-top">
       <span className="race-round">Etapa {event.round}</span>
@@ -20,6 +22,7 @@ function RaceCard({ event, state, today }: { event: GrandPrixEvent; state: RaceS
     <h3 className="race-country">{countryName(event.country)}</h3>
     <p className="race-name">{event.name}</p>
     <p className="race-circuit">{event.circuit} · {event.location}</p>
+    {meta && <img className="circuit-thumb" src={meta.mapPath} alt={meta.name} loading="lazy" />}
   </li>;
 }
 

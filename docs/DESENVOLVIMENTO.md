@@ -95,6 +95,8 @@ Live-Time/
 
 O alias `@/` aponta para `src/` (definido em `tsconfig.json`).
 
+As telas de campeonato e histórico vivem em `src/app/standings/`, `src/app/driver/[id]/` e `src/app/team/[id]/`. Suas APIs estão em `src/app/api/standings/`, `src/app/api/driver/[id]/` e `src/app/api/constructor/[id]/`; o cliente Ergast e as conversões ficam em `src/lib/f1/ergast.ts`, `standings.ts` e `history.ts`. Mapas e metadados de circuito ficam em `public/maps/` e `src/data/circuits-meta.ts`; `node scripts/download-maps.mjs` atualiza os SVGs com a atribuição prevista em [FONTES-DE-DADOS.md](FONTES-DE-DADOS.md).
+
 ## Testes
 
 ```bash
@@ -123,7 +125,7 @@ npx tsx --test tests/normalize.test.ts
 npm run lint
 ```
 
-Estado atual: **0 erros e 0 avisos**. Mantenha assim; o Pull Request deve passar em `npm run lint`.
+Na verificação desta atualização, o lint concluiu com **0 erros e 6 avisos**: dois de `<img>`, dois de dependências de hooks e dois símbolos não usados. O build de produção concluiu com sucesso. Ao alterar esses arquivos, corrija os avisos quando possível; o checklist do Pull Request continua exigindo lint sem avisos.
 
 Padrões adotados para não cair na regra `react-hooks/set-state-in-effect`:
 

@@ -120,19 +120,31 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
   font-size: 14px; font-weight: 600; color: rgb(255 255 255 / 0.78); margin-bottom: 12px;
 }
-.hero-title { font-size: clamp(1.9rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.02; overflow-wrap: anywhere; }
-.hero-sub { margin-top: 10px; font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 500; color: rgb(255 255 255 / 0.82); }
+.hero-title { font-size: clamp(1.9rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.02; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.hero-sub { margin-top: 10px; font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 600; color: rgb(255 255 255 / 0.82); }
 .hero-dates { margin-top: 4px; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
 .live-badge, .next-badge {
   display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
   font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
 }
 .live-badge { background: var(--red); color: #fff; }
-.live-badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: pulse 1.6s ease-in-out infinite; }
+.live-badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: pulse 1.6s ease-in-out infinite; box-shadow: 0 0 0 2px rgba(255,255,255,.3); }
 .next-badge { background: #fff; color: var(--carbon); }
 @keyframes pulse { 50% { opacity: 0.35; } }
 
-.hero-stats { display: flex; gap: clamp(20px, 3vw, 40px); }
+.circuit-map { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.circuit-info { color: rgb(255 255 255 / .78); font-size: 14px; }
+.circuit-info h4 { font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; }
+.circuit-info p { margin-top: 2px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+/* Os traçados têm traço claro, então vivem sempre numa lâmina de carbono. */
+.circuit-image {
+  max-width: 320px;
+  padding: 10px;
+  background: linear-gradient(160deg, #16161a, #0b0b0e);
+  border: 1px solid rgb(255 255 255 / .1);
+}
+.circuit-image img { display: block; width: 100%; height: auto; }
+@media (max-width: 640px) { .circuit-image { max-width: none; } }
 .hero-stat dt { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(255 255 255 / 0.7); }
 .hero-stat dd { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; font-stretch: 112%; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .hero-stat-unit { font-size: 0.55em; font-weight: 600; margin-left: 2px; color: rgb(255 255 255 / 0.75); }
@@ -163,7 +175,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   grid-template-columns: minmax(0, 1fr) 340px;
 }
 .board-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 16px; }
-.board-title { font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 800; line-height: 1.15; margin-top: 4px; }
+.board-title { font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 900; line-height: 1.15; margin-top: 4px; letter-spacing: -0.005em; }
 .board-title-session { font-weight: 500; color: var(--ink-2); }
 
 .segmented { display: inline-flex; border: 1px solid var(--line-strong); }
@@ -178,7 +190,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* Tabela de cronometragem */
 .table-wrap {
   background: var(--surface); border-top: 1px solid var(--line-strong); border-right: 1px solid var(--line-strong);
-  border-radius: var(--radius-corner); overflow-x: auto; overscroll-behavior-x: contain;
+  border-radius: var(--radius-corner); overflow-x: auto;
 }
 .timing { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums lining-nums; font-size: 15px; }
 .timing thead th {
@@ -191,9 +203,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .timing tbody tr:last-child td, .timing tbody tr:last-child th { border-bottom: 0; }
 .timing tbody tr:hover { background: var(--surface-2); }
 .timing .c-pos { width: 52px; text-align: center; font-weight: 800; font-stretch: 112%; font-size: 16px; }
-.timing thead .c-pos { text-align: center; font-size: 12px; font-weight: 600; font-stretch: 100%; }
+.timing thead .c-pos { text-align: center; font-size: 12px; font-weight: 700; font-stretch: 100%; }
 .timing .c-num, .timing thead .c-num { text-align: right; }
-.timing .c-gap { font-weight: 600; }
+.timing .c-gap { font-weight: 700; }
 .timing tr.in-pit td, .timing tr.in-pit th { color: var(--ink-2); }
 
 .driver { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -208,7 +220,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gap-leader { font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.04em; }
 .gap-out { font-weight: 600; color: var(--ink-3); }
 
-.sector-session-best { color: var(--purple); font-weight: 700; }
+.sector-session-best { color: var(--red-ink); font-weight: 700; }
 .sector-personal-best { color: var(--green); font-weight: 700; }
 .sector-unknown { color: var(--ink-3); }
 
@@ -228,7 +240,7 @@ html[data-theme="dark"] .tyre-hard { border-color: #f0f0f0; }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-size: 13px; color: var(--ink-2); }
 .legend li { display: inline-flex; align-items: center; gap: 8px; }
 .swatch { width: 10px; height: 10px; border-radius: 50%; }
-.swatch-session-best { background: var(--purple); }
+.swatch-session-best { background: var(--red); }
 .swatch-personal-best { background: var(--green); }
 .swatch-normal { background: var(--ink); }
 
@@ -241,13 +253,16 @@ html[data-theme="dark"] .tyre-hard { border-color: #f0f0f0; }
 /* Direção de prova */
 .race-control {
   position: sticky; top: 16px; max-height: calc(100dvh - 32px); display: flex; flex-direction: column;
+  min-width: 0; overflow: hidden;
   background: var(--surface); border-top: 1px solid var(--line-strong); border-right: 1px solid var(--line-strong);
   border-radius: var(--radius-corner);
 }
 .race-control-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
 .section-title { font-size: 16px; font-weight: 800; }
 .count { font-size: 13px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.rc-list { overflow-y: auto; overscroll-behavior: contain; }
+/* Lista rola internamente enquanto couber no painel; ao chegar no fim,
+   o rolamento continua na página (sem overscroll-behavior: contain) */
+.rc-list { overflow-y: auto; }
 .rc-item { padding: 14px 20px; border-bottom: 1px solid var(--line); }
 .rc-item:last-child { border-bottom: 0; }
 .rc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); }
@@ -257,7 +272,7 @@ html[data-theme="dark"] .tyre-hard { border-color: #f0f0f0; }
 .rc-warning .rc-dot { background: var(--amber); }
 .rc-green .rc-dot { background: #1fc95a; }
 .rc-category { color: var(--ink); }
-.rc-message { margin-top: 6px; font-size: 14px; line-height: 1.4; }
+.rc-message { margin-top: 6px; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
 .rc-more {
   display: none; width: 100%; min-height: 48px; border: 0; border-top: 1px solid var(--line);
   background: transparent; font-size: 14px; font-weight: 700; color: var(--ink);
@@ -275,6 +290,7 @@ html[data-theme="dark"] .tyre-hard { border-color: #f0f0f0; }
   background: var(--surface); border-top: 1px solid var(--line-strong); border-right: 1px solid var(--line-strong);
   border-radius: var(--radius-corner);
 }
+.circuit-thumb { margin-top: auto; width: 100%; height: 80px; object-fit: contain; opacity: .85; }
 .race-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; min-height: 24px; }
 .race-round { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .race-flag { padding: 3px 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: #fff; color: var(--red-ink); }
@@ -333,10 +349,87 @@ html[data-theme="dark"] .skeleton::after, .hero .skeleton::after { background: l
 }
 @media (max-width: 559px) {
   .hide-sm { display: none; }
-  .site-nav a { padding-inline: 8px; font-size: 14px; }
+  .site-header-inner { gap: 8px; }
+  .site-nav { gap: 0; }
+  .site-nav a { padding-inline: 6px; font-size: 13px; }
   .wordmark { font-size: 16px; }
   .wordmark-light { display: none; }
   .timing td, .timing tbody th { padding-inline: 8px; }
   .board-header .segmented { width: 100%; }
   .board-header .segmented button { flex: 1; }
+  .c-sector { padding-inline: 4px !important; font-size: 13px; }
+}
+.c-points { text-align: right; font-weight: 700; }
+.delta { font-size: 11px; font-weight: 800; margin-left: 6px; }
+.delta.up { color: var(--green); }
+.delta.down { color: var(--red-ink); }
+
+/* Aviso de feed sem sessão / última classificação registrada */
+.notice {
+  margin: 12px auto 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--red);
+  background: var(--panel-2, rgba(255, 255, 255, .04));
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.notice strong { color: var(--foreground); font-weight: 800; }
+
+/* --- Perfis (Pilotos / Equipes) --- */
+.hero-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--red); color: #fff; padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 14px; text-transform: uppercase; }
+.milestones-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.milestone { display: flex; gap: 12px; padding: 16px; background: var(--surface); border-top: 1px solid var(--line-strong); border-right: 1px solid var(--line-strong); border-radius: var(--radius-corner); }
+.milestone-icon { flex-shrink: 0; display: flex; align-items: flex-start; }
+.badge { display: inline-flex; align-items: center; justify-content: center; padding: 8px 10px; border-radius: 8px; font-size: 18px; }
+.milestone-body { flex: 1; min-width: 0; }
+.milestone-title { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; color: var(--ink); }
+.milestone-detail { font-size: 14px; color: var(--ink-2); margin-bottom: 2px; }
+.milestone-meta { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+/* ---------- Timing ao vivo: todas as colunas sem scroll horizontal (≤1099px) ----------
+   Abaixo do breakpoint em que a barra lateral recolhe, cada linha vira um
+   cartão em grade de 6 colunas: linha 1 = posição, piloto, diferença e pneu;
+   linha 2 = última volta, melhor volta e voltas completas; linha 3 = S1/S2/S3.
+   Os micro-rótulos vêm de data-label porque o thead é ocultado. Nada some e
+   nada estoura em 360px. */
+@media (max-width: 1099px) {
+  .timing--live { display: block; width: 100%; }
+  .timing--live thead { display: none; }
+  .timing--live tbody { display: block; }
+  .timing--live tbody tr {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 6px; row-gap: 8px;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .timing--live tbody tr:last-child { border-bottom: 0; }
+  .timing--live tbody td, .timing--live tbody th {
+    padding: 0 !important; height: auto; border-bottom: 0;
+    white-space: normal; text-align: left; min-width: 0;
+  }
+  .timing--live .c-pos { grid-column: 1; grid-row: 1; }
+  .timing--live .c-driver { grid-column: 2 / span 3; }
+  .timing--live .c-gap { grid-column: 5; }
+  .timing--live .c-tyre { grid-column: 6; justify-self: end; }
+  .timing--live .c-lap-first { grid-column: 1 / span 2; grid-row: 2; }
+  .timing--live .c-lap-best  { grid-column: 3 / span 2; grid-row: 2; }
+  .timing--live .c-num       { grid-column: 5 / span 2; grid-row: 2; }
+  .timing--live [data-label="S1"] { grid-column: 1 / span 2; grid-row: 3; }
+  .timing--live [data-label="S2"] { grid-column: 3 / span 2; grid-row: 3; }
+  .timing--live [data-label="S3"] { grid-column: 5 / span 2; grid-row: 3; }
+  .timing--live td[data-label] { display: flex; flex-direction: column; gap: 2px; }
+  .timing--live td[data-label]::before {
+    content: attr(data-label);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  .timing--live td[data-label] span, .timing--live td.c-num { font-variant-numeric: tabular-nums; }
+  .timing--live .driver { flex-wrap: wrap; min-width: 0; }
+  .timing--live .driver-name { font-size: 13px; overflow-wrap: anywhere; }
+  .timing--live .pit-tag { flex: none; }
 }

@@ -17,11 +17,11 @@ const CACHE = "public, max-age=0, s-maxage=1, stale-while-revalidate=4";
 
 export async function GET() {
   try {
-    const { health, snapshot } = await getLiveSnapshot();
-    const body: LiveTimingPollResponse = { connected: health.connected && Boolean(snapshot), lastMessageAt: health.lastMessageAt, ...(snapshot ? { snapshot } : {}) };
+    const { health, snapshot, stale, staleAt } = await getLiveSnapshot();
+    const body: LiveTimingPollResponse = { connected: health.connected, lastMessageAt: health.lastMessageAt, stale, ...(staleAt ? { staleAt } : {}), ...(snapshot ? { snapshot } : {}) };
     return NextResponse.json(body, { headers: { "Cache-Control": CACHE, "CDN-Cache-Control": "public, s-maxage=1, stale-while-revalidate=4" } });
   } catch (error) {
-    const body: LiveTimingPollResponse = { connected: false, lastMessageAt: null, error: unavailable(error).error };
+    const body: LiveTimingPollResponse = { connected: false, lastMessageAt: null, stale: false, error: unavailable(error).error };
     return NextResponse.json(body, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
 }
