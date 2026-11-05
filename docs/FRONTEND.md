@@ -190,6 +190,8 @@ Lista das mensagens (até 50, a mais recente primeiro) com categoria em portugu�
 - a primeira etapa que ainda não terminou fica em **vermelho**, com o selo **Próxima · N dias** ou **Neste fim de semana**;
 - etapas passadas mostram **Encerrada**;
 - mapas locais usam miniatura com moldura, dimensões e tratamento monocromático uniformes.
+- cada cartão abre uma subpágina da etapa com sessões, horários, contagem regressiva e pódios disponíveis de GP e Sprint.
+- horários publicados são convertidos para Brasília (BRT); em 2027, dias das sessões aparecem com horário a anunciar até a publicação oficial.
 
 ## Tema claro e escuro
 

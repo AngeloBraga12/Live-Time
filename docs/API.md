@@ -309,6 +309,48 @@ Cabeçalho: `Cache-Control: public, max-age=300, stale-while-revalidate=3600`.
 
 ---
 
+## GET /api/calendar/{season}/{round}
+
+Detalhes de uma etapa do calendário, usados pela subpágina `/calendar/{season}/{round}`. Arquivo: [`src/app/api/calendar/[season]/[round]/route.ts`](../src/app/api/calendar/%5Bseason%5D/%5Bround%5D/route.ts).
+
+```json
+{
+  "sprintWeekend": true,
+  "sessions": [
+    { "label": "Treino Livre 1", "date": "2026-03-13", "time": "03:30:00Z", "timeZone": "UTC" },
+    { "label": "Classificação Sprint", "date": "2026-03-13", "time": "07:30:00Z", "timeZone": "UTC" },
+    { "label": "Sprint", "date": "2026-03-14", "time": "03:00:00Z", "timeZone": "UTC" },
+    { "label": "Classificação", "date": "2026-03-14", "time": "07:00:00Z", "timeZone": "UTC" },
+    { "label": "Corrida", "date": "2026-03-15", "time": "07:00:00Z", "timeZone": "UTC" }
+  ],
+  "raceStart": { "date": "2026-03-15", "time": "07:00:00Z" },
+  "racePodium": [
+    { "position": 1, "driver": "Andrea Kimi Antonelli", "code": "ANT", "team": "Mercedes" },
+    { "position": 2, "driver": "George Russell", "code": "RUS", "team": "Mercedes" },
+    { "position": 3, "driver": "Lewis Hamilton", "code": "HAM", "team": "Ferrari" }
+  ],
+  "sprintPodium": [
+    { "position": 1, "driver": "George Russell", "code": "RUS", "team": "Mercedes" },
+    { "position": 2, "driver": "Charles Leclerc", "code": "LEC", "team": "Ferrari" },
+    { "position": 3, "driver": "Lewis Hamilton", "code": "HAM", "team": "Ferrari" }
+  ]
+}
+```
+
+| Campo | Descrição |
+| --- | --- |
+| `sprintWeekend` | Indica se a etapa está entre os fins de semana Sprint anunciados para a temporada. |
+| `sessions` | Sessões ordenadas por horário. `time` pode faltar quando a hora não foi publicada; a tela informa essa ausência sem estimar. |
+| `raceStart` | Data e hora exatas para a contagem regressiva, quando disponíveis. |
+| `racePodium`, `sprintPodium` | Três primeiros colocados retornados pela fonte histórica. Lista vazia quando ainda não há resultado. |
+| `sources` | Endereços do calendário oficial da Fórmula 1 e da API Jolpica/Ergast. |
+
+Os horários publicados vêm da Jolpica/Ergast em UTC e a interface os converte para Brasília (BRT). A temporada 2027 tem as datas e fins de semana Sprint anunciados, mas os horários de início das sessões ficam como não publicados até a fonte os disponibilizar.
+
+Cabeçalho: `Cache-Control: public, max-age=300, stale-while-revalidate=3600`.
+
+---
+
 ## Códigos de status
 
 | Código | Rotas | Significado |
