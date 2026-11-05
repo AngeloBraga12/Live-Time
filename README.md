@@ -1,5 +1,9 @@
 # Apex Timing (Live-Time)
 
+## Enciclopédia de pilotos
+
+O diretório de pilotos está em [`/drivers`](src/app/drivers/page.tsx), com fichas históricas em `/driver/{driverId}`. Escopo, data de corte, critérios de confirmação contratual, fontes e lacunas atuais estão em [docs/enciclopedia-pilotos.md](docs/enciclopedia-pilotos.md). O recorte atual tem data de 5 de novembro de 2026.
+
 Painel web para acompanhar o **live timing da Fórmula 1 em tempo real**, de graça e sem chave de API: classificação, diferenças, setores, pneus, clima, estado da pista, mensagens da direção de prova e o calendário da temporada, com visual inspirado no site oficial da F1.
 
 **Site no ar:** [live-time-silk.vercel.app](https://live-time-silk.vercel.app) — publicado automaticamente pela Vercel a cada merge na `main`.
