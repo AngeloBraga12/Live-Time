@@ -4,6 +4,10 @@ Histórico de mudanças do projeto, montado a partir do histórico do Git. Datas
 
 ## [Não lançado]
 
+### Navegação
+
+- Indicador da aba ativa desliza entre os links do cabeçalho e respeita a preferência por movimento reduzido.
+
 ### Calendário e leitura do live timing
 
 - Mapas SVG corrigidos e completados para todos os circuitos listados no calendário, com créditos e licenças registrados.
